@@ -1,9 +1,36 @@
-const originStr = '?username=ddsnfs1k232k==&password=fhglfkls/0f9ds==&ret=1';
-const strs = originStr.split('?')[1].split('&');
-const info = [];
+const strings = [
+  '2022年3月3日上午10时，中国国务院新闻办公室将发布( )白皮书，并举行新闻发布会。 A.《中国残疾人体育事业发展和权利保障》B.《中国残疾人体育事业发展规划》C.《中国残疾人参与体育活动权利保障》D.《中国残疾人体育事业发展五年规划》 答案：A',
+  '中央网信办、教育部等四部门印发( )，部署了加大优质数字资源供给、打造高品质数字生活等8个方面重点任务 。　　A. 《2022年提升全民数字素养与技能工作要点》B. 《2022年提升全民科学素养与技能工作要点》C. 《2022年提升全民数字素养与规范意识要点》D. 《2022年提升全民数字化水平与技能工作要点》 答案：A',
+  '国家卫生健康委等15个部门近日联合印发《“十四五”健康老龄化规划》。规划提出9项主要任务，发展( )老年健康服务是其中之一。A. 中医药 B. 健身 C. 社区养老 D. 互相帮扶 答案：A',
+  '第( )冬季奥林匹克运动会闭幕式2月20日晚在国家体育场隆重举行。A. 二十四届 B. 二十五届 C. 二十三届 D. 二十二届   答案：A',
+  '测量参数模板创建时需，取消非空校验( )局。我国发射了天宫一 号探测技术。 A. 20年 B.30年 C.  四十五年  D. 低碳生活 答案：A',
+  '  测量参数模板创 建时需，, 取消非空校验( )局。我国 发射了天宫一号探测技术。    A. 123 B.   5% C.  ing  D. 低碳生活1  答案：A',
+  '测量参数模板创建 时需，取 消非空校验 ( )局。我国发射了天宫一 号探测技术。 A. 20233年B.30年 C.  四十五年  D. 低碳生活23  答案：   B',
+  '测量参数模板创建时需，取消非空校验( )局。我国发射了 天宫一号探测技术。 A . 201年 B.30年 C.  四十五年  D. 低碳生活2222答案：   D  ',
+  '测量 参数模 板创建时需， 取消非空校验( )局。我国发射了天宫一号探 测技术。 A. 20fds年   B. 30年C.  四十五年  D. 低 碳生活.0.  答案：C',
+];
+const regex = {
+  title: /^\s*.+。/,
+  A: /(?<=A\s*\.\s*).+(?=\s*B.+答案)/,
+  B: /(?<=B\s*\.\s*).+(?=\s*C.+答案)/,
+  C: /(?<=C\s*\.\s*).+(?=\s*D.+答案)/,
+  D: /(?<=D\s*\.\s*).+(?=\s*答案)/,
+  right: /(?<=答案\s*：\s*).+(?=\s*)/,
+};
+const list = [];
 
-strs.forEach((item, index) => {
-  info.push(item.replace(/^[\w]{8}=/, ''));
+const match = (item, reg) => item.match(reg)[0].trim();
+strings.forEach((item, index) => {
+  list.push({
+    id: index + 1,
+    title: match(item, regex.title),
+    options: [
+      { tag: 'A', desc: match(item, regex.A) },
+      { tag: 'B', desc: match(item, regex.B) },
+      { tag: 'C', desc: match(item, regex.C) },
+      { tag: 'D', desc: match(item, regex.D) },
+    ],
+    rightOpt: match(item, regex.right),
+  });
 });
-
-console.log(info);
+console.log(list);
