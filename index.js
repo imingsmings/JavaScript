@@ -1,3 +1,3 @@
 import './style.css';
 
-import './regex/search.js';
+import './object/index.js';
