@@ -2,5 +2,12 @@
   "name": "js",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {}
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel serve --port 8080",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "parcel": "^2.5.0"
+  }
 }

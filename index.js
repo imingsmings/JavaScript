@@ -1,3 +1,1 @@
-import './style.css';
-
-import './regex/search.js';
+import './flow/switch.js';
