@@ -1,1 +1,1 @@
-import './flow/switch.js';
+import './flow/for.js';
