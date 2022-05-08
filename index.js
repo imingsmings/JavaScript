@@ -1,1 +1,2 @@
-import './flow/for.js';
+// import './flow/for.js';
+import './function';
