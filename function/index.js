@@ -25,3 +25,7 @@
 // }
 
 // test(2, 4);
+
+// console.log(123);
+
+import './recursion.js';

@@ -1,2 +1,3 @@
 // import './flow/for.js';
-import './function';
+// import './function';
+import './precompile';
