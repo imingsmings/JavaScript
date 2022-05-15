@@ -1,3 +1,5 @@
 // import './flow/for.js';
 // import './function';
-import './precompile';
+// import './precompile';
+
+import './object';

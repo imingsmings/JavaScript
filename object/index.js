@@ -1,1 +1,2 @@
-import './assign.js';
+// import './assign.js';
+import './obj.js';
