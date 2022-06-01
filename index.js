@@ -3,3 +3,5 @@
 // import './precompile';
 
 import './object';
+
+// import './class';
