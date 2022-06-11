@@ -2,6 +2,8 @@
 // import './function';
 // import './precompile';
 
-import './object';
+// import './object';
 
 // import './class';
+
+import './array';
