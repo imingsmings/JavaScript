@@ -28,4 +28,5 @@
 
 // console.log(123);
 
-import './recursion.js';
+// import './recursion.js';
+import './arguments.js';
