@@ -1,5 +1,5 @@
 // import './flow/for.js';
-import './function/index.js';
+// import './function/index.js';
 // import './precompile';
 
 // import './object';
@@ -9,3 +9,7 @@ import './function/index.js';
 // import './array';
 
 // import './error';
+
+// import './type/parseInt.js';
+
+import './course/index.js';
