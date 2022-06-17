@@ -6,10 +6,10 @@
 
 // import './class';
 
-// import './array';
+import './array/index.js';
 
 // import './error';
 
 // import './type/parseInt.js';
 
-import './course/index.js';
+// import './course/index.js';
