@@ -5,4 +5,9 @@
 // import './copyWithin.js';
 // import './entries.js';
 // import './fill.js';
-import './find.js';
+// import './find.js';
+// import './findIndex.js';
+// import './flat.js';
+// import './flatMap.js';
+// import './equal.js';
+import './includes.js';
