@@ -130,3 +130,45 @@ function preventDefaultEvent(event) {
     e.returnValue = false;
   }
 }
+
+function elementDrag(element) {
+  var x;
+  var y;
+  var vp = getViewportSize();
+  var width = getStyles(element, 'width');
+  var height = getStyles(element, 'height');
+
+  addEvent(element, 'mousedown', function (e) {
+    var e = e || window.event;
+    var coord = getPagePos(e);
+    x = coord.x - getStyles(element, 'left');
+    y = coord.y - getStyles(element, 'top');
+
+    addEvent(document, 'mousemove', move);
+    addEvent(document, 'mouseup', up);
+    cancelBubble(e);
+    preventDefaultEvent(e);
+  });
+
+  function move(e) {
+    var e = e || window.event;
+    var coord = getPagePos(e);
+    var left = coord.x - x;
+    var top = coord.y - y;
+    if (left < 0 || left > vp.width - width) {
+      left = left < 0 ? 0 : vp.width - width;
+    }
+    if (top < 0 || top > vp.height - height) {
+      top = top < 0 ? 0 : vp.height - height;
+    }
+
+    element.style.left = left + 'px';
+    element.style.top = top + 'px';
+  }
+
+  function up(e) {
+    var e = e || window.event;
+    removeEvent(document, 'mousemove', move);
+    removeEvent(document, 'mouseup', up);
+  }
+}
