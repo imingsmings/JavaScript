@@ -6,7 +6,7 @@
 
 // import './class';
 
-import './array/index.js';
+// import './array/index.js';
 
 // import './error';
 
