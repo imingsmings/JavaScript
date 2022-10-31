@@ -23,6 +23,7 @@ export function reactive(list) {
       },
       set(newValue) {
         data.dataSource = newValue;
+        // set current data
         setCurrentData();
       },
     },

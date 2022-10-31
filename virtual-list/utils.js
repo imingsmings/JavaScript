@@ -9,7 +9,7 @@ export function getData(init, count) {
 }
 
 export function setAnimationFrame(callback) {
-  const beginTime = Date.now();
+  let beginTime = Date.now();
 
   requestAnimationFrame(function cb() {
     const endTime = Date.now();
