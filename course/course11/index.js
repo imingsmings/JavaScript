@@ -180,22 +180,75 @@
 //   console.log(e.cause);
 // }
 
-class MyError extends Error {
-  constructor(...args) {
-    super(...args);
-    this.name = MyError.name;
-  }
-}
+// class MyError extends Error {
+//   constructor(...args) {
+//     super(...args);
+//     this.name = MyError.name;
+//   }
+// }
 
-const err = new MyError('hello', { cause: 'world' });
-// console.log(err.name); // MyError
-// console.log(err.message); // hello
-// console.log(err.cause); // world
+// const err = new MyError('hello', { cause: 'world' });
+// // console.log(err.name); // MyError
+// // console.log(err.message); // hello
+// // console.log(err.cause); // world
+
+// try {
+//   throw new MyError('custom error', { cause: 'manual' });
+// } catch (e) {
+//   console.log(e.name); // MyError
+//   console.log(e.message); // custom error
+//   console.log(e.cause); // manual
+// }
+
+// try {
+//   setTimeout(function () {
+//     console.log(a);
+//   }, 1000);
+// } catch (e) {
+//   console.log(e);
+// }
+
+// setTimeout(function () {
+//   try {
+//     console.log(a);
+//   } catch (e) {
+//     // ReferenceError: a is not defined
+//     console.log(e);
+//   }
+// }, 1000);
+// try {
+//   {{{{{{{
+// } catch (e) {
+//   console.log(e);
+// }
+
+// window.addEventListener('error', handleGlobalError, false);
+
+// function handleGlobalError(error) {
+//   // console.log(error.message);
+//   console.log('上传错误日志');
+// }
+
+// process.on('uncaughtException', function (error) {
+//   console.log(error);
+// });
+// getData();
+
+// try {
+//   work;
+// } catch (e) {
+//   errors;
+// } finally {
+//   // handler;
+// }
 
 try {
-  throw new MyError('custom error', { cause: 'manual' });
+  [1, 2, 3].forEach((item) => {
+    if (item === 2) {
+      throw new Error(item);
+    }
+    console.log(item);
+  });
 } catch (e) {
-  console.log(e.name); // MyError
-  console.log(e.message); // custom error
-  console.log(e.cause); // manual
+  console.log(e);
 }
