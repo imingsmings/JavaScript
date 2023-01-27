@@ -9,10 +9,26 @@ app.all('*', (req, res, next) => {
   next();
 });
 
-app.get('/getData', (req, res) => {
+// app.get('/getData', (req, res) => {
+//   return res.json({
+//     name: 'Jason',
+//     age: 24,
+//   });
+// });
+
+app.get('/get', (req, res) => {
   return res.json({
     name: 'Jason',
     age: 24,
+    type: 'get',
+  });
+});
+
+app.post('/post', (req, res) => {
+  return res.json({
+    name: 'Jason',
+    age: 24,
+    type: 'post',
   });
 });
 
