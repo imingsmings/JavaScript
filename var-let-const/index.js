@@ -216,7 +216,7 @@ arr.forEach((cb) => cb());
 for (let i = 0, test = () => i; i < 5; i++) {
   console.log(test());
 }
-for (let i = 0; i < 5; i++, test = () => i) {
+for (let i = 0, test = () => i; i < 5; i++, test = () => i) {
   console.log(test());
 }
 // -------------------------------------------------------------
