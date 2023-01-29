@@ -10,6 +10,7 @@ app.use('*', (req, res, next) => {
 });
 
 app.use(express.static(join(__dirname, 'public')));
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
   return res.json({
@@ -60,6 +61,18 @@ app.get('/html_text', (req, res) => {
         </body>
       </html>
   `);
+});
+
+app.get('/html.ejs', (req, res) => {
+  const title = 'This is a html title by ejs';
+  const list = [
+    { name: 'wxm', age: 23 },
+    { name: 'jason', age: 19 },
+  ];
+  res.render('html.ejs', {
+    title,
+    list,
+  });
 });
 
 app.listen(8080, (req, res) => console.log('ok'));
