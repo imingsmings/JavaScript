@@ -1,7 +1,10 @@
 const express = require('express');
 const { join } = require('path');
+const router = require('./router');
 
 const app = express();
+
+app.use(router);
 
 app.use('*', (req, res, next) => {
   // res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,12 +15,12 @@ app.use('*', (req, res, next) => {
 app.use(express.static(join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-  return res.json({
-    name: 'Jason',
-    age: 24,
-  });
-});
+// app.get('/', (req, res) => {
+//   return res.json({
+//     name: 'Jason',
+//     age: 24,
+//   });
+// });
 
 app.get('/html_text', (req, res) => {
   const title = 'This is a html title';

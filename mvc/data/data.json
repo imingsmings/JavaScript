@@ -1,0 +1,11 @@
+{
+  "titles": {
+    "index": "Index",
+    "detail": "Detail"
+  },
+  "list": [
+    { "id": 1, "name": "wxm", "age": 23 },
+    { "id": 2, "name": "jason", "age": 19 },
+    { "id": 3, "name": "mike", "age": 20 }
+  ]
+}
