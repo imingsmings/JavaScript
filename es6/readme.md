@@ -1,4 +1,4 @@
-### [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
+### [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) 与快级作用域
 
 ES6 新增的声明变量的方式
 
@@ -16,9 +16,24 @@ ES6 新增的声明变量的方式
 3. let 只会在当前的块级作用域内生效
 4. 不建议在块级作用域当中使用函数声明的方式声明函数,而是用函数表达式的方式
 5. 块级作用域没有返回值
+6. 函数声明会提升到当前作用域的顶端,不会越级提升
 
 ### for 与 let
 
 - for 循环中有两个块级作用域
 - for()中作用域可看做{}的父级作用域
 - let 本质上就是为 JS 增加一个块级作用域
+
+### [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+
+ES6 新增的定义常量的方式
+
+1. 一旦定义必须初始化,且不可改变
+2. 会产生块级作用域,不会被预解析,有暂时性死区
+3. 不允许被重复声明
+4. 若保存引用值,则不能改变其引用
+
+### 顶层对象
+
+- 浏览器环境 window
+- Node 环境 global
