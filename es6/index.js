@@ -1,71 +1,42 @@
-// function foo(x, y) {
-//   x = typeof arguments[0] !== undefined ? arguments[0] : 1;
-//   y = typeof arguments[1] !== undefined ? arguments[1] : 2;
-
-//   return x + y;
+/**
+ * 若有默认值,形参与实参的映射关系不存在
+ */
+// function test(a, b, c = 2) {
+//   console.log(arguments.length);
 // }
+// test(1);
+// console.log(test.length);
 
-// 函数默认值
-// function foo(x = 1, y = 2) {
-//   return x + y;
-// }
-// console.log(foo(3, 4)); // 7
-// console.log(foo(0, 4)); // 4
-
-// let x = 1;
-// function foo(x = 1) {
-//   var x = 2;
-//   console.log(x);
-// }
-// foo(5);
-
-// let a = 99;
-// 惰性求值:每一次都需要重新计算表达式的值
-// function foo(b = a + 1) {
-//   console.log(b);
-// }
-// foo();
-// a = 100;
-// foo();
-
-// let [a, [b]] = [1, [2]];
-// console.log(a);
-// console.log(b);
-
-// 解构失败: 变量多了
-// 不完全解构: 值多了
-
-// const [a = 5] = [];
-// console.log(a);
-
-// const { a: x, a: y } = { a: 1 };
-// console.log(x);
-
-// var x = 200,
-//   y = 300,
-//   z = 100;
-// var obj = { x: { y: 42 }, z: { y: z } };
-// console.log(obj);
-
-// ({ y: x = { y: y } } = obj);
-// ({ z: y = { y: z } } = obj);
-// ({ x: z = { y: x } } = obj);
-
-// console.log(x.y, y.y, z.y);
-// console.log(x, y, z);
-
-// function foo({ x = 10 } = {}, { y } = { y: 10 }) {
+// function foo({ x, y }) {
 //   console.log(x, y);
 // }
+// foo(undefined);
+
+// var x = 1;
+// function foo(
+//   x,
+//   y = function () {
+//     var x = 2; // 修改foo的第一个参数
+// var x = 2;
+// let x = 3;
+//     console.log(x);
+//   }
+// ) {
+// var x = 3;
+//   y();
+//   console.log(x);
+// }
+
 // foo();
-// foo({}, {});
-// foo({ x: 2 }, { y: 3 });
+// console.log(x);
 
-// Number.prototype.a = 1;
-// const { toString, a } = 123;
-// console.log(toString === Number.prototype.toString, a);
+function foo() {
+  return (a) => {
+    console.log(this.a);
+  };
+}
 
-const obj = { a: 1 };
-const { toString, a } = obj;
-console.log(toString);
-console.log(a);
+var obj1 = { a: 2 };
+var obj2 = { a: 3 };
+var bar = foo.call(obj1);
+bar.call(obj2);
