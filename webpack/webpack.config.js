@@ -20,6 +20,9 @@ const StyleCommonLoader = [
       esModule: true,
     },
   },
+  {
+    loader: 'postcss-loader',
+  },
 ];
 
 module.exports = {

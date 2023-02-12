@@ -6,7 +6,13 @@
   "scripts": {
     "build": "webpack"
   },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "> 0.2%"
+  ],
   "devDependencies": {
+    "autoprefixer": "^10.4.13",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "5.2.7",
     "file-loader": "^6.2.0",
@@ -16,6 +22,8 @@
     "mini-css-extract-plugin": "^1.6.2",
     "node-sass": "^8.0.0",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "postcss": "^8.4.21",
+    "postcss-loader": "4.3.0",
     "sass": "^1.58.0",
     "sass-loader": "^10.1.1",
     "style-loader": "2.0.0",
