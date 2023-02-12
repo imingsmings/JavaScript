@@ -16,3 +16,7 @@ function createImg(className) {
   oImg.className = className;
   oApp.append(oImg);
 }
+
+Promise.resolve('hello').then((result) => {
+  console.log(result);
+});

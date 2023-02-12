@@ -60,6 +60,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+        ],
+      },
+      {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           // {
@@ -82,11 +91,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        rules: StyleCommonLoader,
+        use: StyleCommonLoader,
       },
       {
         test: /\.s[ac]ss$/i,
-        rules: [
+        use: [
           ...StyleCommonLoader,
           {
             loader: 'sass-loader',
@@ -101,7 +110,7 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        rules: [
+        use: [
           ...StyleCommonLoader,
           {
             loader: 'less-loader',

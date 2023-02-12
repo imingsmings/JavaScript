@@ -13,7 +13,10 @@
     "> 0.2%"
   ],
   "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
     "autoprefixer": "^10.4.13",
+    "babel-loader": "8.3.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "5.2.7",
     "file-loader": "^6.2.0",
@@ -33,5 +36,7 @@
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "core-js": "3"
+  }
 }
