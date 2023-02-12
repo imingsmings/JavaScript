@@ -28,10 +28,28 @@ const StyleCommonLoader = [
 module.exports = {
   mode: 'development',
   // mode: 'production',
-  devtool: devMode ? 'eval-cheap-module-source-map' : 'cheap-module-source-map',
 
   entry: {
     main: './src/index.js',
+  },
+
+  devtool: devMode ? 'eval-cheap-module-source-map' : 'cheap-module-source-map',
+
+  devServer: {
+    contentBase: './dist',
+    host: '0.0.0.0',
+    port: 8000,
+    open: true,
+    publicPath: '/',
+    hot: true,
+    proxy: {
+      '/api': {
+        target: 'https://www.imings.cn/',
+        // pathRewrite: {
+        //   '^/api': '',
+        // },
+      },
+    },
   },
 
   output: {
