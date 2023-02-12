@@ -1,7 +1,12 @@
 body {
-  background-color: #424242;
+  // background-color: #424242;
   .logo {
     width: 300px;
     // transform: rotate(-45deg);
+  }
+}
+#root {
+  > div {
+    color: red;
   }
 }

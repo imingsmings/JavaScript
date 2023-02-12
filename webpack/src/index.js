@@ -3,6 +3,7 @@ import life from './assets/life.jpg';
 import scssStyle from './scss/index.scss';
 // import lessStyle from './less/index.less';
 // console.log(scssStyle);
+import './App.jsx';
 
 const oApp = document.querySelector('#app');
 
