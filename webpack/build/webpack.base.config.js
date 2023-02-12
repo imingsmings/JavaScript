@@ -83,6 +83,31 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      // split async and sync code
+      chunks: 'all',
+      minSize: 200000,
+      // 在入口文件最少使用几次
+      cacheGroups: {
+        // vendors: false,
+        // default: false,
+        vendors: {
+          // 来自node_modules的包单独打包,前缀为vendors
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+          minChunks: 1,
+          // filename: 'vendors.js',
+        },
+        default: {
+          priority: -20,
+          minChunks: 2,
+          filename: 'common.js',
+        },
+      },
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',

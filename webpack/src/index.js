@@ -1,15 +1,10 @@
 import life from './assets/life.jpg';
-// import style from './css/index.css';
 import scssStyle from './scss/index.scss';
-// import lessStyle from './less/index.less';
-// console.log(scssStyle);
-import './App.jsx';
+import { add } from './utils';
+// import './App.jsx';
 
 const oApp = document.querySelector('#app');
-
-// createImg(style.logo);
 createImg(scssStyle.logo);
-// createImg(lessStyle.logo);
 
 function createImg(className) {
   const oImg = new Image();
@@ -21,3 +16,20 @@ function createImg(className) {
 Promise.resolve('hello').then((result) => {
   console.log(result);
 });
+
+function createElement() {
+  return import(/* webpackChunkName: "lodash" */ 'lodash').then(
+    ({ default: _ }) => {
+      const result = _.join(['t1', 't2', 't3'], '-');
+      const oDiv = document.createElement('div');
+      oDiv.innerText = result;
+      return oDiv;
+    }
+  );
+}
+const createElementPromise = createElement();
+createElementPromise.then((div) => {
+  document.body.append(div);
+});
+
+add(1, 2);
