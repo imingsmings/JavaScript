@@ -2,9 +2,12 @@ const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 const StyleCommonLoader = [
   {
-    loader: MiniCssExtractPlugin.loader,
+    loader: isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
   },
   {
     loader: 'css-loader',
@@ -87,11 +90,9 @@ module.exports = {
     splitChunks: {
       // split async and sync code
       chunks: 'all',
-      minSize: 200000,
+      minSize: 20000,
       // 在入口文件最少使用几次
       cacheGroups: {
-        // vendors: false,
-        // default: false,
         vendors: {
           // 来自node_modules的包单独打包,前缀为vendors
           test: /[\\/]node_modules[\\/]/,
@@ -112,11 +113,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       // hash: true,
-      minify: process.env.NODE_ENV === 'production',
+      minify: isProduction,
     }),
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash:8].css',
-    }),
   ],
 };

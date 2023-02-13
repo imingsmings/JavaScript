@@ -9,7 +9,7 @@ const developmentConfig = {
     contentBase: './dist',
     host: '0.0.0.0',
     port: 8000,
-    open: true,
+    open: false,
     publicPath: '/',
     hot: true,
     proxy: {
