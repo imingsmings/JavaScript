@@ -23,11 +23,15 @@
 // );
 // console.log(result);
 
-const obj = {
-  a: 1,
-  b: 2,
-};
-console.log(Object.keys(obj));
+// const obj = {
+//   a: 1,
+//   b: 2,
+// };
+// console.log(Object.keys(obj));
 
-const arr = [1, 2, 3];
-console.log(arr.keys());
+// const arr = [1, 2, 3];
+// console.log(arr.keys());
+
+// const arr = [1, 2, 3, 4, 5, 6];
+// arr.copyWithin(2, 0, 3);
+// console.log(arr);
