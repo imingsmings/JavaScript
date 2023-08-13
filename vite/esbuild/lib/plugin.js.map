@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["js:/Users/imings/Code/web/Vite/esbuild/src/pages/version.js", "../src/plugin.jsx"],
+  "sourcesContent": ["\"// \u7248\u672C\u53F7.2\\nconst x = 1;\\nconst y = 2;\\nconsole.log(x + y);\"", "import txt from './data/data.txt'\nimport code from './pages/version.js'\n\nconsole.log(txt);\nconsole.log(code);"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;;;;;;ACCA,uBAAiB;AAEjB,UAAQ,IAAI;AACZ,UAAQ,IAAI;",
+  "names": []
+}

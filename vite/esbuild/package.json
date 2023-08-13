@@ -1,0 +1,25 @@
+{
+  "name": "esbuild",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "es": "esbuild src/index.js --outdir=es --bundle --target=esnext",
+    "nodejs": "esbuild src/index.js --outdir=nodejs --platform=node --format=cjs",
+    "browser": "esbuild src/index.js --outdir=browser --platform=browser --format=cjs",
+    "build": "esbuild src/app.jsx --outdir=build --bundle --target=esnext",
+    "dev": "node esbuild.config.js",
+    "plugin": "node esbuild.config.plugin.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.14.2"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
