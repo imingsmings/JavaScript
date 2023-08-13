@@ -1,0 +1,28 @@
+.basic {
+    background-color: #fff;
+    padding: 20px 30px;
+}
+.basic .name {
+    text-align: left;
+    line-height: 36px;
+    margin-bottom: 15px;
+    color: #080103;
+    font-size: 30px;
+}
+.basic .position {
+    text-align: left;
+    color: #747474;
+    font-size: 14px;
+    line-height: 24px;
+}
+.basic ul {
+    display: flex;
+    justify-content: flex-start;
+    color: #747474;
+    margin-top: 10px;
+    line-height:24px;
+}
+.basic ul li {
+    font-size: 14px;
+    line-height: 24px;
+}

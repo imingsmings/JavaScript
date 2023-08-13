@@ -1,0 +1,26 @@
+.evaluation {
+    background-color: #fff;
+    padding:10px 30px 20px 30px;
+}
+.evaluation>p {
+    color: #747474;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.evaluation>p>i {
+    display: inline-block;
+    width: 25px;
+    height: 30px;
+    font-size: 17px;
+    line-height: 30px;
+    text-align: left;
+}
+.evaluation .content {
+    /* text-indent: 2em; */
+    font-size: 14px;
+    color: #747474;
+    line-height: 28px;
+    font-weight: initial;
+    line-height: 28px;
+}

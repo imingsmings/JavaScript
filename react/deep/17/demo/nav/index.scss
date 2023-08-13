@@ -1,0 +1,27 @@
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  line-height: 44px;
+
+  .nav-item {
+    &.active-black {
+      color: #000;
+    }
+
+    &.active-blue {
+      color: blue;
+    }
+
+    &.active-orange {
+      color: orange;
+    }
+
+    &.active-purple {
+      color: purple;
+    }
+  }
+}
