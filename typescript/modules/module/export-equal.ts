@@ -1,0 +1,3 @@
+class API {}
+
+export = API;
