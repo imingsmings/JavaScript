@@ -49,3 +49,26 @@
 //         console.log(this.k);
 //     }
 // }
+
+class MessageQueue {
+    private messages: string[] = [];
+    private constructor(messages: string[]) {
+        this.messages = messages;
+    }
+
+    static create(messages: string[]) {
+        return new MessageQueue(messages);
+    }
+}
+
+// Constructor of class 'Base' is private and only accessible within the class declaration.
+// new MessageQueue()
+
+const queue = MessageQueue.create(['hello', 'world']);
+
+// Cannot extend a class 'MessageQueue'. Class constructor is marked as private.
+// class MyQueue extends MessageQueue {
+//     constructor() {
+//         super([]);
+//     }
+// }
