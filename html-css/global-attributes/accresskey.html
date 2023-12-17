@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>accesskey</title>
+</head>
+<body>
+    <!-- Control + Option + a -->
+    <!-- <button accesskey="a">accesskey</button> -->
+
+    <a 
+        href="https://www.google.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        accesskey="g"
+    >
+        Google
+    </a>
+
+    <form action="submit.htm" method="post">
+        <label for="name">Name</label>
+        <input type="text" id="name" accesskey="n">
+        <input type="submit" id="submitform" accesskey="s" value="Submit">
+    </form>
+
+    <script>
+        const oFormBtn = document.querySelector('#submitform')
+
+        console.dir(oFormBtn);
+    </script>
+</body>
+</html>
