@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>autocapitalize</title>
+    <style>
+        input {
+            /* text-transform: capitalize;
+            text-transform: lowercase;
+            text-transform: uppercase; */
+            /* text-transform: calc(); */
+        }
+    </style>
+</head>
+<body>
+    <input type="text" autocapitalize="words" id="input" />
+
+    <script>
+        const oInput = document.querySelector('#input')
+
+        oInput.addEventListener('input', handleInput, false)
+        
+        function handleInput() {
+            autoCapitalize.call(this)
+        }
+
+        function autoCapitalize() {
+            const autocapitalizeType = this.autocapitalize
+            
+            switch (autocapitalizeType) {
+                case 'sentences':
+                    this.value = sentences(this.value);
+                    break;
+                case 'on':
+                    this.value = sentences(this.value);
+                    break;
+                case 'words':
+                    this.value = words(this.value);
+                    break;
+                case 'characters':
+                    this.value = characters(this.value)
+                    break;
+                default:
+                    break;
+            }
+
+            function sentences(value) {
+                return value.replace(/\w/, s => s.toUpperCase())
+            } 
+
+            function words(value) {
+                return value.split(' ').map(v => sentences(v)).join(' ')
+            }
+
+            function characters(value) {
+                return value.toUpperCase()
+            }
+        }
+    </script>
+</body>
+</html>
