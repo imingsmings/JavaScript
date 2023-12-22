@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>autofocus</title>
+</head>
+<body>
+    <div>
+        <input type="text" autofocus />
+        <select name="" id="" autofocus></select>
+        <textarea name="" id="" cols="30" rows="10" autofocus></textarea>
+        <button autofocus>Button</button>
+    </div>
+    <div>
+        <dialog id="dialog">
+            <input autofocus />
+            <button id="close">close</button>
+          </dialog>
+        <button id="show">Show Modal</button>
+    </div>
+    <div contenteditable autofocus>
+        123
+    </div>
+
+    <script>
+        const oDialog = document.querySelector('#dialog')
+        const oShow = document.querySelector('#show')
+        const oClose = document.querySelector('#close')
+
+        oShow.addEventListener('click', () => {
+            oDialog.showModal()
+        }, false)
+
+        oClose.addEventListener('click', () => {
+            oDialog.close()
+        }, false)
+    </script>
+</body>
+</html>

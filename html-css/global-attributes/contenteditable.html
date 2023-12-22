@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>contenteditable</title>
+    <style>
+        #div {
+            caret-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="div" contenteditable="true">123</div>
+
+    <script>
+        const oDiv = document.querySelector('#div')
+
+        oDiv.addEventListener('input', (e) => {
+            console.dir(e.target.innerText);
+        }, false)
+    </script>
+</body>
+</html>
