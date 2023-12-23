@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class</title>
+    <style>
+        html, body {
+            all: unset;
+            height: 100%;
+        }
+        .h-full {
+            height: 100%;
+        }
+        .flex {
+            display: flex;
+        }
+        .box {
+            flex: 1;
+        }
+        .left {
+            background-color: aquamarine;
+        }
+        .right {
+            background-color: cadetblue;
+        }
+    </style>
+</head>
+<body class="h-full">
+    <div class="flex h-full">
+        <div class="box h-full left"></div>
+        <div class="box h-full right"></div>
+    </div>
+    <script>
+        const oDiv = document.querySelector('.flex')
+        // console.log(oDiv);
+        // console.log(oDiv.getAttribute('class'));
+
+        // oDiv.className = 'test'
+        // oDiv.setAttribute('class','test')
+
+        oDiv.classList.add('test', 'test1')
+        oDiv.classList.remove('test1')
+    </script>
+</body>
+</html>
