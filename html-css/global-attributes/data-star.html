@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>data-star</title>
+    <style>
+        #box {
+            width: 500px;
+            height: 500px;
+        }
+
+        div[data-text="div element"] {
+            margin: 0 auto;
+        }
+
+        div[data-Style="style"] {
+            background-color: aquamarine;
+        }
+
+    </style>
+</head>
+<body>
+    <div
+        id="box"
+        data-x="1"
+        data-y="2"
+        data-text="div element"
+        data-text-abc="div element abc"
+        data--test="test"
+        data-test-1="test1"
+        data-style="style"
+    >
+    This is a DIV Element.
+    </div>
+
+    <script>
+        const oDiv = document.querySelector('#box')
+        console.log(oDiv.getAttribute('data-text'));
+        console.log(oDiv.dataset.textAbc);
+    </script>
+</body>
+</html>
