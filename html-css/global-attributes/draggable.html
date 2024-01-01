@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>draggable</title>
+</head>
+<body>
+    <img src="https://developer.imings.cn/img/x.svg" alt="" draggable="false">
+    <p draggable="true">This text may be dragged.</p>
+    <a href="https://developer.imings.cn/" >Developer</a>
+
+    <script>
+        const draggableElement = document.querySelector('p[draggable="true"]');
+        draggableElement.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", window.getSelection().toString());
+        });
+    </script>
+</body>
+</html>
