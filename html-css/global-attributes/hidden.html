@@ -4,14 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hidden</title>
+    <style>
+        div {
+            height: 40px;
+            width: 300px;
+            border: 5px dashed black;
+            margin: 1rem 0;
+            padding: 1rem;
+            font-size: 2rem;
+        }
+
+        div#until-found-box {
+            display: none;
+            color: red;
+            border: 5px dotted red;
+            background-color: lightgray;
+        }
+    </style>
 </head>
 <body>
-    <span hidden>I'm hidden</span>
+    <!-- <span hidden>I'm hidden</span>
     <span hidden="">I'm also hidden</span>
     <span hidden="hidden">I'm hidden too!</span>
     <span hidden="nothing">I'm hidden too!</span>
 
-    <span hidden="until-found">I'm hidden until found</span>
+    <span hidden="until-found">I'm hidden until found</span> -->
+
+    <a href="#until-found-box">Go to hidden content</a>
+
+    <div>I'm not hidden</div>
+    <div id="until-found-box" hidden="until-found">Hidden until found</div>
+    <div>I'm not hidden</div>
+
+    <script>
+        const untilFound = document.querySelector("#until-found-box");
+        untilFound.addEventListener(
+            "beforematch",
+            () => (untilFound.textContent = "I've been revealed!"),
+        );
+    </script>
 
 </body>
 </html>
