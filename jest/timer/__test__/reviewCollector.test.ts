@@ -60,3 +60,42 @@ describe('Test ReviewCollector', () => {
         ).toBe(1)
     })
 })
+
+const ReviewCollectorMock = jest
+    .spyOn(ReviewCollector.prototype, 'logReview')
+    .mockImplementation(() => 'Loged Review')
+
+test('Test methods', () => {
+    const collector = new ReviewCollector()
+    const review = new ProductReview('Product A', 'Good')
+    collector.addReview(review)
+
+    collector.logReview()
+    expect(ReviewCollectorMock).toHaveBeenCalledTimes(1)
+})
+
+const ReviewCollectorStaticMock = jest
+    .spyOn(ReviewCollector, 'showInfo')
+    .mockImplementation(() => 'Static method')
+
+test('Test static methods', () => {
+    const result = ReviewCollector.showInfo()
+    expect(ReviewCollectorStaticMock).toHaveBeenCalled()
+    expect(result).toBe('Static method')
+})
+
+const ReviewCollectorSetterGetterMock = jest.spyOn(
+    ReviewCollector.prototype,
+    'productList',
+    'get'
+)
+
+test('Test getter', () => {
+    const collector = new ReviewCollector()
+    const review = new ProductReview('Product A', 'Good')
+    collector.addReview(review)
+    expect(
+        ReviewCollectorSetterGetterMock
+    ).toHaveBeenCalled()
+    expect(collector.productList).toEqual(['Product A'])
+})

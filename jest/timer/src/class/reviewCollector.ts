@@ -43,6 +43,14 @@ export default class ReviewCollector {
         return numGoodReviews
     }
 
+    public logReview() {
+        for (let i = 0; i < this.productList.length; i++) {
+            console.log(this.productList[i])
+        }
+    }
+
+    static showInfo() {}
+
     get productList() {
         return this._productList
     }
