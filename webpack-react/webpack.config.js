@@ -1,23 +1,18 @@
-import path from 'path'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import AddAssetHtmlWebpackPlugin from 'add-asset-html-webpack-plugin'
-import {
-    Configuration,
+const path = require('path')
+const os = require('os')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+const {
     IgnorePlugin,
     DllReferencePlugin
-} from 'webpack'
-import { Configuration as DevServerConfiguration } from 'webpack-dev-server'
+} = require('webpack')
+const WebpackMkcert = require('webpack-mkcert')
 
 const isProduction = process.env.NODE_ENV === 'production'
 const stylesHandler = MiniCssExtractPlugin.loader
 
-export interface WebpackConfigOptions
-    extends Configuration {
-    devServer?: DevServerConfiguration
-}
-
-const config: WebpackConfigOptions = {
+const config = {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction
         ? false
@@ -29,14 +24,6 @@ const config: WebpackConfigOptions = {
         publicPath: '/',
         clean: {
             keep: 'vendor'
-        }
-    },
-    devServer: {
-        open: false,
-        host: '0.0.0.0',
-        static: {
-            directory: path.join(__dirname, 'dist'),
-            publicPath: '/'
         }
     },
     resolve: {
@@ -83,7 +70,7 @@ const config: WebpackConfigOptions = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html',
+            template: './src/index.html',
             inject: 'body',
             minify: {
                 minifyCSS: true,
@@ -99,14 +86,6 @@ const config: WebpackConfigOptions = {
                 ),
                 publicPath: '/vendor',
                 outputPath: 'vendor'
-            },
-            {
-                filepath: path.resolve(
-                    __dirname,
-                    './dist/vendor/antd.dll.js'
-                ),
-                publicPath: '/vendor',
-                outputPath: 'vendor'
             }
         ]),
         new MiniCssExtractPlugin({}),
@@ -118,17 +97,48 @@ const config: WebpackConfigOptions = {
             manifest: path.resolve(
                 __dirname,
                 './dist/vendor/react-manifest.json'
-            ),
-            extensions: ['.js', '.jsx', '.ts', '.tsx']
-        }),
-        new DllReferencePlugin({
-            manifest: path.resolve(
-                __dirname,
-                './dist/vendor/antd-manifest.json'
-            ),
-            extensions: ['.js', '.jsx', '.ts', '.tsx']
+            )
         })
     ]
 }
 
-export default config
+module.exports = async function () {
+    const https = await WebpackMkcert.default({
+        source: 'coding',
+        hosts: ['localhost', '127.0.0.1', getLocalIP()]
+    })
+
+    config.devServer = {
+        open: false,
+        host: '0.0.0.0',
+        static: {
+            directory: path.join(__dirname, 'dist'),
+            publicPath: '/'
+        },
+        server: {
+            type: 'https',
+            options: {
+                host: 'localhost',
+                ...https
+            }
+        }
+    }
+
+    return config
+}
+
+function getLocalIP() {
+    const networkInterfaces = os.networkInterfaces()
+    for (const interfaceName in networkInterfaces) {
+        const addresses = networkInterfaces[interfaceName]
+        for (const address of addresses) {
+            if (
+                address.family === 'IPv4' &&
+                !address.internal
+            ) {
+                return address.address
+            }
+        }
+    }
+    return '127.0.0.1'
+}

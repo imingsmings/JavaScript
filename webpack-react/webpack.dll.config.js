@@ -1,13 +1,10 @@
-import path from 'path'
-import { DllPlugin } from 'webpack'
+const path = require('path')
+const { DllPlugin } = require('webpack')
 
-import type { WebpackConfigOptions } from './webpack.config'
-
-const config: WebpackConfigOptions = {
+const config = {
     mode: 'production',
     entry: {
-        react: ['react', 'react-dom'],
-        antd: 'antd'
+        react: ['react', 'react-dom', 'antd']
     },
     output: {
         path: path.resolve(__dirname, 'dist/vendor'),
@@ -37,4 +34,4 @@ const config: WebpackConfigOptions = {
     ]
 }
 
-export default config
+module.exports = config
