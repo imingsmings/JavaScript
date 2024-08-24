@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // var x = []
+    // var bool = false;
+
+    // function grow(){
+    //   x.push(new Array(100000).fill('-'));
+    //   if(bool){
+    //     setTimeout(grow, 1000);
+    //   }
+    // }
+    
+    // function start(){
+    //   grow();
+    //   bool = true;
+    // }
+    
+    // function stop(){
+    //   bool = false;
+    // }
+
+    // start()
+
+    var bool = false;
+    function grow(){
+      var x = [];
+      x.push(new Array(100000).fill('a'));
+      
+      if(bool){
+      setTimeout(grow, 1000);
+      }
+    }
+    function start(){
+      grow();
+      bool = true;
+    }
+    function stop(){
+      bool = false;
+    }
+    start()
+  </script>
+</body>
+</html>
