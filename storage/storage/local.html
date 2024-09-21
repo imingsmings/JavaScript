@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Hello, LocalStorage!!!!</h1>
+    <script>
+        const a = localStorage.getItem('a');
+        const students = localStorage.getItem('students');
+
+        if (!a) {
+            localStorage.setItem('a', 1);
+        }
+
+        if (!students) {
+            localStorage.setItem('students', `[
+                {
+                    "id": 1,
+                    "name": "mike"
+                },
+                {
+                    "id": 2,
+                    "name": "joe"
+                } 
+            ]`);
+        }
+
+        
+        
+
+        // const a = localStorage.getItem('a');
+        // const students = localStorage.getItem('students');
+
+        console.log(a);
+        try {
+            const list = JSON.parse(students);
+            console.log(list);
+        } catch (e) {
+            console.log(e);
+        }
+
+        // localStorage.removeItem('a');
+        // localStorage.clear();
+    </script>
+</body>
+</html>

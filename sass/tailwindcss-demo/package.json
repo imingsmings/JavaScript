@@ -1,0 +1,12 @@
+{
+  "name": "tailwindcss-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/styles.css -o ./dist/output.css"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.11"
+  }
+}

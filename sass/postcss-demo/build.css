@@ -1,0 +1,13 @@
+body {
+  background-color: beige;
+  font-size: 16px;
+}
+
+.box1 {
+  background-image: url(static/1.png);
+  -webkit-transform: translate(100px);
+      -ms-transform: translate(100px);
+          transform: translate(100px);
+  display: -ms-grid;
+  display: grid;
+}

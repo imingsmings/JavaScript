@@ -1,0 +1,10 @@
+body {
+  background-color: red;
+  font-size: 16px;
+}
+
+.box1 {
+  /* background-image: url(static/1.png); */
+  transform: translate(100px);
+  display: grid;
+}

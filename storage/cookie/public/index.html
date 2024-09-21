@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello, Cookie!!!!</h1>
+    <script>
+        // document.cookie
+        // console.log(document.cookie);
+
+        /**
+         * name => cookie名称
+         * value => cookie值
+         * expires => cookie过期时间 秒
+         * path => '/'
+         * domain => .api.baidu.com
+         * secure => 安全传输加密
+         * HttpOnly => 在客户端是否可以使用JS修改cookie
+         */
+        // document.cookie = ''
+        function setCookie ({
+            name,
+            value,
+            expires,
+            path = '/',
+            domain = '',
+            secure = false,
+            httpOnly = false
+        }) {
+            // value => 空格  特殊符号 => 16进制
+            let cookieStr = `${ name }=${ encodeURIComponent(value) }`;
+
+            if (expires) {
+                const date = new Date();
+                date.setTime(date.getTime() + expires * 24 * 60 * 60 * 1000);
+                cookieStr += `; expires=${ date.toString() }`;
+            }
+
+            cookieStr += `; path=${ path }`;
+
+            if (domain) {
+                cookieStr += `; domain=${ domain }`;
+            }
+
+            if (secure) {
+                cookieStr += `; Secure`;
+            }
+
+            if (httpOnly) {
+                cookieStr += `; HttpOnly`;
+            }
+
+            document.cookie = cookieStr;
+        }
+
+        function getCookie (name) {
+            const cookies = document.cookie.split(";");
+
+            for (let i = 0; i < cookies.length; i ++) {
+                const c = cookies[i].trim();
+
+                if (c.indexOf(`${ name }=`) === 0) {
+                    return decodeURIComponent(c).substring(name.length + 1);
+                } 
+            }
+
+            return null;
+        }
+
+        const students = [
+            {
+                id: 1,
+                name: 'mike'
+            },
+            {
+                id: 2,
+                name: 'joe'
+            }
+        ]
+
+        setCookie({
+            name: 'students',
+            value: JSON.stringify(students),
+            expires: 30,
+            httpOnly: false
+        })
+
+        const studentsStr = getCookie('students');
+
+        console.log(studentsStr);
+    </script>
+</body>
+</html>

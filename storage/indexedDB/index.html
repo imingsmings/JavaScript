@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Hello, IndexedDB!!!!</h1>
+    <script>
+        const indexedDB = window.indexedDB || 
+                          window.webkitIndexedDB || 
+                          window.mozIndexedDB ||
+                          window.msIndexedDB;
+        
+        const dbConfig = {
+            name: 'tcms',
+            version: 1
+        }
+
+        const db = indexedDB.open(gObject.values(dbConfi));
+
+        db.addEventListener('upgradeneeded', handleUpgradeNeeded, false);
+        db.addEventListener('error', handleError, false);
+        db.addEventListener('success', handleSuccess, false);
+
+        function handleUpgradeNeeded (e) {
+            const dbInstance = e.target.result;
+            if (!dbInstance.objectStoreNames.contains('tcms_doctor')) {
+                const store = dbInstance.createObjectStore('tcms_doctor', {
+                    autoIncrement: true
+                });
+
+                store.createIndex('nameIndex', 'name', { unique: false });
+                store.createIndex('ageIndex', 'age', { unique: false });
+            }
+        }
+
+        function handleError (e) {
+            console.log(e);
+        }
+
+        function handleSuccess (e) {
+            const db = e.target.result;
+
+            const trans = db.transaction(['tcms_doctor'], "readwrite");
+
+            const doctorStore = trans.objectStore('tcms_doctor');
+
+            const d1 = {
+                name: "张三",
+                age: 56
+            }
+
+            const d2 = {
+                name: '李四',
+                age: 43
+            }
+
+            const r1 = doctorStore.add(d1);
+
+            r1.addEventListener('error', (e) => {
+                console.log(e.target.error);
+            }, false);
+
+            const r2 = doctorStore.add(d2);
+
+            r2.addEventListener('error', (e) => {
+                console.log(e.target.error);
+            }, false);
+
+            const doctor = doctorStore.get(1);
+
+            console.log(doctor);
+        }
+    </script>
+</body>
+</html>
