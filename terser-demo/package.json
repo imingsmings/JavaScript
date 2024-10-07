@@ -1,0 +1,12 @@
+{
+  "name": "terser-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "compress": "terser ./src/index.js -o ./dist/index.js --source-map -o ./dist/index.js"
+  },
+  "devDependencies": {
+    "terser": "^5.34.1"
+  }
+}

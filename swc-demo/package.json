@@ -1,0 +1,9 @@
+{
+  "name": "swc-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@swc/core": "^1.7.26"
+  }
+}
