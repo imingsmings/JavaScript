@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "isolatedModules":true,
+    "useDefineForClassFields":true,
+    "skipLibCheck": true,
+
+    "moduleResolution": "Bundler",
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx":"preserve",
+
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src","vite.config.ts", "global.d.ts"]
+}
