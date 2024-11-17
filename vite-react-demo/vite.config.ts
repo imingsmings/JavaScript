@@ -36,5 +36,14 @@ export default defineConfig({
             ]
         }
     },
-    plugins: [react()]
+    plugins: [react()],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    react: ['react', 'react-dom']
+                }
+            }
+        }
+    }
 }) as UserConfig

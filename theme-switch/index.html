@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+    @media (prefers-color-scheme: dark) {
+      html{
+        color:#fff;
+        background-color:#000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const media = window.matchMedia('(prefers-color-scheme: light)')
+
+    const followSystemTheme = (e) => {
+      if (!e.target.matches) {
+        document.documentElement.className = 'dark';
+      } else {
+        document.documentElement.className = 'light';
+      }
+    }
+
+    media.addEventListener('change', followSystemTheme, false)
+  </script>
+</body>
+</html>
