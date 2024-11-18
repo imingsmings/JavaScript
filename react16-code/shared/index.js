@@ -21,7 +21,7 @@ export function getEventName(prop) {
     return prop.replace('on', '').toLowerCase()
 }
 
-export function createDOM(type) {
+export function createNode(type) {
     return isTextNode(type)
         ? document.createTextNode('')
         : document.createElement(type)

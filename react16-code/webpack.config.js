@@ -14,6 +14,7 @@ export default {
     resolve: {
         extensions: ['.js', '.jsx']
     },
+    devtool: 'cheap-module-source-map',
     module: {
         rules: [
             {
@@ -46,6 +47,6 @@ export default {
     devServer: {
         port: 8000,
         host: '0.0.0.0',
-        open: true
+        open: false
     }
 }
