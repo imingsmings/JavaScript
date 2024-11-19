@@ -1,15 +1,19 @@
 import { createNode, getEventName, isEvent, isProperty } from '../shared/index.js'
 
+// 下一个工作单元,即要处理的fiber节点
 let nextUnitOfWork = null
+// 正在工作的fiber树, 内存中的树 用于双缓存
+let wipRoot = null
 
 function render(element, contianer) {
     // 初始化 nextUnitOfWork
-    nextUnitOfWork = {
+    wipRoot = {
         dom: contianer,
         props: {
             children: [element]
         }
     }
+    nextUnitOfWork = wipRoot
 }
 
 function workloop(deadline) {
@@ -20,7 +24,33 @@ function workloop(deadline) {
         shouldYield = deadline.timeRemaining() > 1
     }
 
+    if (!nextUnitOfWork && wipRoot) {
+        commitRoot()
+    }
+
     requestIdleCallback(workloop)
+}
+
+function commitRoot() {
+    commitWork(wipRoot.child)
+    wipRoot = null
+}
+
+function commitWork(fiber) {
+    if (!fiber) {
+        return
+    }
+
+    let dompParentFiber = fiber.parent
+    while (!dompParentFiber.dom) {
+        dompParentFiber = dompParentFiber.parent
+    }
+    dompParentFiber.dom.appendChild(fiber.dom)
+    // let parentDom = fiber.parent.dom
+    // parentDom.appendChild(fiber.dom)
+
+    commitWork(fiber.child)
+    commitWork(fiber.sibling)
 }
 
 // 处理当前工作单元，并返回下一个工作单元
@@ -31,9 +61,9 @@ function performNextUnitOfWork(fiber) {
     }
 
     // 找到当前节点的父节点
-    if (fiber.parent) {
-        fiber.parent.dom.appendChild(fiber.dom)
-    }
+    // if (fiber.parent) {
+    //     fiber.parent.dom.appendChild(fiber.dom)
+    // }
 
     // 遍历当前节点的子元素依次创建 fiber node 结构
     let index = 0
