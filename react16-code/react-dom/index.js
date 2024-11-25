@@ -1,9 +1,20 @@
-import { createNode, getEventName, isEvent, isProperty } from '../shared/index.js'
+import {
+    createNode,
+    getEventName,
+    isEvent,
+    isGoneProperty,
+    isNewProperty,
+    isProperty
+} from '../shared/index.js'
 
 // 下一个工作单元,即要处理的fiber节点
 let nextUnitOfWork = null
 // 正在工作的fiber树, 内存中的树 用于双缓存
 let wipRoot = null
+// 更新前的根节点fiber树
+let currentRoot = null
+// 需要移除的节点
+let deletions = []
 
 function render(element, contianer) {
     // 初始化 nextUnitOfWork
@@ -11,76 +22,63 @@ function render(element, contianer) {
         dom: contianer,
         props: {
             children: [element]
-        }
+        },
+        alternate: currentRoot
     }
     nextUnitOfWork = wipRoot
 }
 
-function workloop(deadline) {
-    let shouldYield = true
-    // 如果有下一个工作单元则继续
-    while (nextUnitOfWork && shouldYield) {
-        nextUnitOfWork = performNextUnitOfWork(nextUnitOfWork)
-        shouldYield = deadline.timeRemaining() > 1
-    }
-
-    if (!nextUnitOfWork && wipRoot) {
-        commitRoot()
-    }
-
-    requestIdleCallback(workloop)
-}
-
-function commitRoot() {
-    commitWork(wipRoot.child)
-    wipRoot = null
-}
-
-function commitWork(fiber) {
-    if (!fiber) {
-        return
-    }
-
-    let dompParentFiber = fiber.parent
-    while (!dompParentFiber.dom) {
-        dompParentFiber = dompParentFiber.parent
-    }
-    dompParentFiber.dom.appendChild(fiber.dom)
-    // let parentDom = fiber.parent.dom
-    // parentDom.appendChild(fiber.dom)
-
-    commitWork(fiber.child)
-    commitWork(fiber.sibling)
-}
-
-// 处理当前工作单元，并返回下一个工作单元
-function performNextUnitOfWork(fiber) {
-    // 如果没有真实DOM则创建
-    if (!fiber.dom) {
-        fiber.dom = createDom(fiber)
-    }
-
-    // 找到当前节点的父节点
-    // if (fiber.parent) {
-    //     fiber.parent.dom.appendChild(fiber.dom)
-    // }
-
-    // 遍历当前节点的子元素依次创建 fiber node 结构
+// 协调子元素
+function reconcileChildren(wipFiber, elements) {
     let index = 0
-    let elements = fiber.props.children
     let prevSibling = null
-    while (index < elements.length) {
+    // 上一次渲染的 fiber, 初次渲染 为 null 或 undefined
+    let oldFiber = wipFiber.alternate && wipFiber.alternate.child
+
+    while (index < elements.length || oldFiber != null) {
         const element = elements[index]
-        // 创建 fiber node
-        const newFiber = {
-            type: element.type,
-            props: element.props,
-            parent: fiber,
-            dom: null
+        let newFiber = null
+
+        // 节点类型是否相同
+        const sameType = oldFiber && element && element.type === oldFiber.type
+
+        // 若类型相同则只更新 props
+        if (sameType) {
+            newFiber = {
+                type: element.type,
+                props: element.props,
+                dom: oldFiber.dom,
+                parent: wipFiber,
+                alternate: oldFiber,
+                effectTag: 'UPDATE'
+            }
         }
+
+        // 若新的存在并且类型和老的不同需要新增
+        if (element && !sameType) {
+            newFiber = {
+                type: element.type,
+                props: element.props,
+                dom: null,
+                parent: wipFiber,
+                alternate: null,
+                effectTag: 'PLACEMENT'
+            }
+        }
+
+        // 若老的存在并且类型和新的不同需要移除
+        if (oldFiber && !sameType) {
+            oldFiber.effectTag = 'DELETION'
+            deletions.push(oldFiber)
+        }
+
+        if (oldFiber) {
+            oldFiber = oldFiber.sibling
+        }
+
         // 将第一个子元素作为当前节点的子节点
         if (index === 0) {
-            fiber.child = newFiber
+            wipFiber.child = newFiber
         }
         // 其他子元素作为第一个子元素的兄弟节点
         else {
@@ -91,6 +89,134 @@ function performNextUnitOfWork(fiber) {
         prevSibling = newFiber
         index++
     }
+}
+
+// 提交任务，将fiber tree 渲染为真实 DOM
+function commitRoot() {
+    deletions.forEach(commitWork)
+    commitWork(wipRoot.child)
+    currentRoot = wipRoot
+    wipRoot = null
+}
+
+// 处理提交的fiber树， 渲染真实DOM
+function commitWork(fiber) {
+    if (!fiber) {
+        return
+    }
+
+    // let parentDom = fiber.parent.dom
+    // parentDom.appendChild(fiber.dom)
+
+    let parentFiber = fiber.parent
+    while (!parentFiber.dom) {
+        parentFiber = parentFiber.parent
+    }
+
+    const parentDOM = parentFiber.dom
+
+    // 新增
+    if (fiber.effectTag === 'PLACEMENT' && fiber.dom != null) {
+        commitAppend(fiber, parentDOM)
+    }
+    // 删除
+    else if (fiber.effectTag === 'DELETION') {
+        commitDeletion(fiber, parentDOM)
+    }
+    // 更新
+    else if (fiber.effectTag === 'UPDATE' && fiber.dom != null) {
+        commitUpdate(fiber)
+    }
+
+    // 渲染子节点
+    commitWork(fiber.child)
+    // 渲染兄弟节点
+    commitWork(fiber.sibling)
+}
+
+function commitAppend(fiber, parentDOM) {
+    if (fiber.dom) {
+        parentDOM.appendChild(fiber.dom)
+    }
+}
+
+function commitDeletion(fiber, parentDOM) {
+    if (fiber.dom) {
+        parentDOM.removeChild(fiber.dom)
+    } else {
+        commitDeletion(fiber.child, parentDOM)
+    }
+}
+
+function commitUpdate(fiber) {
+    updateDom(fiber.dom, fiber.alternate.props, fiber.props)
+}
+
+function updateDom(dom, prevProps, nextProps) {
+    // 移除旧的事件监听
+    Object.keys(prevProps)
+        .filter(isEvent)
+        .filter(isGoneProperty(prevProps, nextProps) || isNewProperty(prevProps, nextProps)(key))
+        .forEach((name) => {
+            const eventName = name.toLowerCase().slice(2)
+            dom.addEventListener(eventName, prevProps[name])
+        })
+
+    // 移除旧的属性
+    Object.keys(prevProps)
+        .filter(isProperty)
+        .filter(isGoneProperty(prevProps, nextProps))
+        .forEach((name) => {
+            dom[name] = ''
+        })
+
+    // 设置新的属性
+    Object.keys(nextProps)
+        .filter(isProperty)
+        .filter(isNewProperty(prevProps, nextProps))
+        .forEach((name) => {
+            dom[name] = nextProps[name]
+        })
+
+    // 添加新的事件处理
+    Object.keys(nextProps)
+        .filter(isEvent)
+        .filter(isNewProperty(prevProps, nextProps))
+        .forEach((name) => {
+            const eventName = name.toLowerCase().slice(2)
+            dom.addEventListener(eventName, nextProps[name])
+        })
+}
+
+function createDom(fiber) {
+    const dom = createNode(fiber.type)
+
+    Object.keys(fiber.props)
+        .filter(isProperty)
+        .forEach((prop) => {
+            dom[prop] = fiber.props[prop]
+        })
+
+    Object.keys(fiber.props)
+        .filter((prop) => isEvent(prop, fiber.props[prop]))
+        .forEach((prop) => {
+            dom.addEventListener(getEventName(prop), fiber.props[prop])
+        })
+
+    return dom
+}
+
+// 处理当前工作单元，并返回下一个工作单元
+function performNextUnitOfWork(fiber) {
+    // 如果没有真实DOM则创建
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+
+    // 遍历当前节点的子元素依次创建 fiber 结构
+    let elements = fiber.props.children
+    // 协调子元素
+    reconcileChildren(fiber, elements)
 
     // 查找并返回下一个 fiber
     // 如果有子节点则将其作为下一个工作单元
@@ -110,50 +236,24 @@ function performNextUnitOfWork(fiber) {
     }
 }
 
-// 利用浏览器空闲时间渲染，不阻塞界面交互
-requestIdleCallback(workloop)
+// 渲染工作循环
+function workloop(deadline) {
+    let shouldYield = true
+    // 如果有下一个工作单元则继续
+    while (nextUnitOfWork && shouldYield) {
+        nextUnitOfWork = performNextUnitOfWork(nextUnitOfWork)
+        shouldYield = deadline.timeRemaining() > 1
+    }
 
-function createDom(fiber) {
-    const dom = createNode(fiber.type)
+    if (!nextUnitOfWork && wipRoot) {
+        commitRoot()
+    }
 
-    Object.keys(fiber.props)
-        .filter(isProperty)
-        .forEach((prop) => {
-            const propValue = fiber.props[prop]
-            if (isEvent(prop, propValue)) {
-                dom.addEventListener(getEventName(prop), propValue)
-            } else {
-                dom[prop] = propValue
-            }
-        })
-
-    return dom
+    requestIdleCallback(workloop)
 }
 
-// function render(element, contianer) {
-//     const dom = createDOM(element.type)
-
-//     Object.keys(element.props)
-//         .filter(isProperty)
-//         .forEach((prop) => {
-//             const propValue = element.props[prop]
-//             if (isEvent(prop, propValue)) {
-//                 dom.addEventListener(
-//                     getEventName(prop),
-//                     propValue
-//                 )
-//             } else {
-//                 dom[prop] = propValue
-//             }
-//         })
-
-//     不可中断渲染,性能差
-//     element.props.children.forEach((child) => {
-//         render(child, dom)
-//     })
-
-//     contianer.appendChild(dom)
-// }
+// 利用浏览器空闲时间渲染，不阻塞界面交互
+requestIdleCallback(workloop)
 
 export default {
     render
