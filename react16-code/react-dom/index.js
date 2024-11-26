@@ -16,6 +16,9 @@ let currentRoot = null
 // 需要移除的节点
 let deletions = []
 
+let wipFiber = null
+let hookIndex = 0
+
 function render(element, contianer) {
     // 初始化 nextUnitOfWork
     wipRoot = {
@@ -206,8 +209,21 @@ function createDom(fiber) {
     return dom
 }
 
-// 处理当前工作单元，并返回下一个工作单元
-function performNextUnitOfWork(fiber) {
+function updateFunctionComponent(fiber) {
+    wipFiber = fiber
+    // 重置索引
+    hookIndex = 0
+    // 挂载 hooks
+    wipFiber.hooks = []
+
+    // 将函数执行后的结果作为children
+    const children = [fiber.type(fiber.props)]
+
+    // 协调渲染子子节点
+    reconcileChildren(fiber, children)
+}
+
+function updateHostComponent(fiber) {
     // 如果没有真实DOM则创建
     if (!fiber.dom) {
         fiber.dom = createDom(fiber)
@@ -217,6 +233,50 @@ function performNextUnitOfWork(fiber) {
     let elements = fiber.props.children
     // 协调子元素
     reconcileChildren(fiber, elements)
+}
+
+function useState(initialValue) {
+    const oldHook =
+        wipFiber.alternate && wipFiber.alternate.hooks && wipFiber.alternate.hooks[hookIndex]
+
+    const hook = {
+        state: oldHook ? oldHook.state : initialValue,
+        queue: []
+    }
+
+    const actions = oldHook ? oldHook.queue : []
+    actions.forEach((action) => {
+        hook.state = typeof action === 'function' ? action(hook.state) : action
+    })
+
+    const setState = (action) => {
+        hook.queue.push(action)
+        wipRoot = {
+            dom: currentRoot.dom,
+            props: currentRoot.props,
+            alternate: currentRoot
+        }
+        nextUnitOfWork = wipRoot
+        deletions = []
+    }
+
+    wipFiber.hooks.push(hook)
+
+    hookIndex++
+    return [hook.state, setState]
+}
+
+// 处理当前工作单元，并返回下一个工作单元
+function performNextUnitOfWork(fiber) {
+    const isFunctionComponent = fiber.type instanceof Function
+
+    if (isFunctionComponent) {
+        // 函数组件
+        updateFunctionComponent(fiber)
+    } else {
+        // 普通节点
+        updateHostComponent(fiber)
+    }
 
     // 查找并返回下一个 fiber
     // 如果有子节点则将其作为下一个工作单元
@@ -254,6 +314,8 @@ function workloop(deadline) {
 
 // 利用浏览器空闲时间渲染，不阻塞界面交互
 requestIdleCallback(workloop)
+
+export { useState }
 
 export default {
     render
