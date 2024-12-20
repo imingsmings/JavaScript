@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="open">Open</button>
+  <script>
+    const oBtn = document.getElementById('open')
+    const channel = new BroadcastChannel('test')
+
+    window.onmessage = function (e) {
+      if (e.data.type === 'load') {
+        channel.postMessage({
+          type: 'DATA'
+        })
+      }
+    }
+
+    window.onload = function (e) {
+      if (window.opener) {
+        window.opener.postMessage({ type: 'load'})
+      }
+    }
+
+    channel.onmessage = function (e) {
+      console.log(e.data);
+    }
+
+    oBtn.addEventListener('click', function(e) {
+      window.open('https://127.0.0.1:5500/webapi/test.html')
+    }, false)
+  </script>
+</body>
+</html>
