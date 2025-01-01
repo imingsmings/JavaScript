@@ -138,20 +138,17 @@ class MyPromise {
   }
 
   static all(promises) {
-    if (!isIterable(promises)) {
-      let text = typeof promises
-
-      if (!(text === 'symbol' || text === 'undefined')) {
-        text += ` ${promises}`
-      }
-
-      throw new TypeError(`${text} is not iterable (cannot read property Symbol(Symbol.iterator)`)
-    }
-
     return new MyPromise((resolve, reject) => {
-      if (isString(promises)) {
-        resolve(promises.split(''))
-        return
+      if (!isIterable(promises)) {
+        let text = typeof promises
+
+        if (!(text === 'symbol' || text === 'undefined')) {
+          text += ` ${promises}`
+        }
+
+        throw new TypeError(
+          `${text} is not iterable (cannot read property Symbol(Symbol.iterator))`
+        )
       }
 
       const promiseArr = Array.from(promises)
@@ -161,7 +158,7 @@ class MyPromise {
         return
       }
 
-      const results = []
+      const resolves = []
       let currentIndex = 0
 
       promiseArr.forEach((promise, index) => {
@@ -175,18 +172,56 @@ class MyPromise {
       })
 
       function resolver(value, index) {
-        results[index] = value
+        resolves[index] = value
 
         currentIndex++
 
         if (currentIndex === promiseArr.length) {
-          resolve(results)
+          resolve(resolves)
         }
       }
     })
   }
 
-  static any() {}
+  static any(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!isIterable(promises)) {
+        let text = typeof promises
+
+        if (!(text === 'symbol' || text === 'undefined')) {
+          text += ` ${promises}`
+        }
+
+        throw new TypeError(`${text} is not iterable (cannot read property Symbol(Symbol.iterator)`)
+      }
+
+      const promiseArr = Array.from(promises)
+
+      if (promiseArr.length === 0) {
+        reject(`AggregateError: All promises were rejected`)
+      }
+
+      let reasons = []
+      let currentIndex = 0
+
+      promiseArr.forEach((promise) => {
+        if (isPromise(promise)) {
+          promise.then(resolve, (reason) => {
+            reasons[currentIndex] = reason
+            currentIndex++
+            if (currentIndex === promiseArr.length) {
+              reject({
+                error: `AggregateError: All promises were rejected`,
+                reasons: reasons
+              })
+            }
+          })
+        } else {
+          resolve(promise)
+        }
+      })
+    })
+  }
 
   static race() {}
 
@@ -282,3 +317,16 @@ function isPromise(value) {
 // }
 
 // module.exports = MyPromise
+
+// function testAsync() {
+//   return new MyPromise((resolve, reject) => {
+//     setTimeout(resolve, 1000, 1)
+//   })
+// }
+
+// async function main() {
+//   const result = await testAsync()
+//   console.log(result)
+// }
+
+// main()
