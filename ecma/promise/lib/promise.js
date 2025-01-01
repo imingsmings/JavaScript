@@ -36,9 +36,9 @@ class MyPromise {
         this.state = FULFILLED
         this.value = value
 
-        this.onFulfilledCallbacks.forEach((fn) => {
-          fn()
-        })
+        this.onFulfilledCallbacks.forEach((fn) => fn())
+
+        this.onFulfilledCallbacks = []
       }
     }
 
@@ -47,9 +47,9 @@ class MyPromise {
         this.state = REJECTED
         this.reason = reason
 
-        this.onRejectedCallbacks.forEach((fn) => {
-          fn()
-        })
+        this.onRejectedCallbacks.forEach((fn) => fn())
+
+        this.onRejectedCallbacks = []
       }
     }
 
@@ -118,6 +118,97 @@ class MyPromise {
 
     return promise2
   }
+
+  catch(onRejected) {
+    return this.then(null, onRejected)
+  }
+
+  finally(onFinally) {}
+
+  static resolve(value) {
+    return new MyPromise((resolve, _) => {
+      resolve(value)
+    })
+  }
+
+  static reject(resson) {
+    return new MyPromise((_, reject) => {
+      reject(resson)
+    })
+  }
+
+  static all(promises) {
+    if (!isIterable(promises)) {
+      let text = typeof promises
+
+      if (!(text === 'symbol' || text === 'undefined')) {
+        text += ` ${promises}`
+      }
+
+      throw new TypeError(`${text} is not iterable (cannot read property Symbol(Symbol.iterator)`)
+    }
+
+    return new MyPromise((resolve, reject) => {
+      if (isString(promises)) {
+        resolve(promises.split(''))
+        return
+      }
+
+      const promiseArr = Array.from(promises)
+
+      if (promiseArr.length === 0) {
+        resolve(promiseArr)
+        return
+      }
+
+      const results = []
+      let currentIndex = 0
+
+      promiseArr.forEach((promise, index) => {
+        if (isPromise(promise)) {
+          promise.then((value) => {
+            resolver(value, index)
+          }, reject)
+        } else {
+          resolver(promise, index)
+        }
+      })
+
+      function resolver(value, index) {
+        results[index] = value
+
+        currentIndex++
+
+        if (currentIndex === promiseArr.length) {
+          resolve(results)
+        }
+      }
+    })
+  }
+
+  static any() {}
+
+  static race() {}
+
+  static try() {}
+
+  static allSettled() {}
+
+  static withResolvers() {
+    let _resolve = null
+    let _reject = null
+
+    const promise = new MyPromise((resolve, reject) => {
+      _resolve = resolve
+      _reject = reject
+    })
+
+    return {
+      promise,
+      resolve: _resolve,
+      reject: _reject
+    }
+  }
 }
 
 function resolvePromise(promise2, x, resolve, reject) {
@@ -167,15 +258,27 @@ function isObject(value) {
   return typeof value === 'object' && value !== null
 }
 
-MyPromise.defer = MyPromise.deferred = function () {
-  const deferred = {}
-
-  deferred.promise = new MyPromise((resolve, reject) => {
-    deferred.resolve = resolve
-    deferred.reject = reject
-  })
-
-  return deferred
+function isIterable(value) {
+  return value && value[Symbol.iterator] && isFunction(value[Symbol.iterator])
 }
 
-module.exports = MyPromise
+function isString(value) {
+  return typeof value === 'string'
+}
+
+function isPromise(value) {
+  return value instanceof MyPromise || value instanceof Promise
+}
+
+// MyPromise.defer = MyPromise.deferred = function () {
+//   const deferred = {}
+
+//   deferred.promise = new MyPromise((resolve, reject) => {
+//     deferred.resolve = resolve
+//     deferred.reject = reject
+//   })
+
+//   return deferred
+// }
+
+// module.exports = MyPromise
