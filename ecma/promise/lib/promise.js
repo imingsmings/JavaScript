@@ -39,6 +39,7 @@ class MyPromise {
         this.onFulfilledCallbacks.forEach((fn) => fn())
 
         this.onFulfilledCallbacks = []
+        this.onRejectedCallbacks = []
       }
     }
 
@@ -49,6 +50,7 @@ class MyPromise {
 
         this.onRejectedCallbacks.forEach((fn) => fn())
 
+        this.onFulfilledCallbacks = []
         this.onRejectedCallbacks = []
       }
     }
@@ -123,7 +125,20 @@ class MyPromise {
     return this.then(null, onRejected)
   }
 
-  finally(onFinally) {}
+  finally(onFinally) {
+    return this.then(
+      (value) => {
+        return MyPromise.resolve(onFinally()).then(() => {
+          return value
+        })
+      },
+      (reason) => {
+        return MyPromise.resolve(onFinally()).then(() => {
+          throw reason
+        })
+      }
+    )
+  }
 
   static resolve(value) {
     return new MyPromise((resolve, _) => {
@@ -330,3 +345,19 @@ function isPromise(value) {
 // }
 
 // main()
+
+// const p = Promise.resolve(
+//   new Promise((resolve, reject) => {
+//     // resolve(1)
+//     reject(1)
+//   })
+// )
+
+// p.then(
+//   (value) => {
+//     console.log(value)
+//   },
+//   (reason) => {
+//     console.log(reason)
+//   }
+// )
