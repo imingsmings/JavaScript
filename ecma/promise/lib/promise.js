@@ -323,6 +323,16 @@ class MyPromise {
 
   static try(callback, ...args) {
     return new MyPromise((resolve, reject) => {
+      if (!isFunction(callback)) {
+        let text = typeof callback
+
+        if (!(text === 'symbol' || text === 'undefined')) {
+          text += ` ${isString(callback) ? `"${callback}"` : callback}`
+        }
+
+        throw new TypeError(`${text} is not a function`)
+      }
+
       try {
         const ret = callback(...args)
         if (isPromise(ret)) {
@@ -352,6 +362,13 @@ class MyPromise {
     }
   }
 }
+
+Promise.try().catch((r) => {
+  console.log(r)
+})
+MyPromise.try().catch((r) => {
+  console.log(r)
+})
 
 function resolvePromise(promise2, x, resolve, reject) {
   if (promise2 === x) {
