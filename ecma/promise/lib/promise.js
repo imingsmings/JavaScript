@@ -363,13 +363,6 @@ class MyPromise {
   }
 }
 
-Promise.try().catch((r) => {
-  console.log(r)
-})
-MyPromise.try().catch((r) => {
-  console.log(r)
-})
-
 function resolvePromise(promise2, x, resolve, reject) {
   if (promise2 === x) {
     return reject(new TypeError(`Chaining cycle detected for promise #<MyPromise>`))
@@ -432,15 +425,15 @@ function isPromise(value) {
   return value instanceof MyPromise || value instanceof Promise
 }
 
-// MyPromise.defer = MyPromise.deferred = function () {
-//   const deferred = {}
+MyPromise.defer = MyPromise.deferred = function () {
+  const deferred = {}
 
-//   deferred.promise = new MyPromise((resolve, reject) => {
-//     deferred.resolve = resolve
-//     deferred.reject = reject
-//   })
+  deferred.promise = new MyPromise((resolve, reject) => {
+    deferred.resolve = resolve
+    deferred.reject = reject
+  })
 
-//   return deferred
-// }
+  return deferred
+}
 
-// module.exports = MyPromise
+module.exports = MyPromise
