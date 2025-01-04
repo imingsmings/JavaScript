@@ -157,7 +157,7 @@ class MyPromise {
       if (!isIterable(promises)) {
         let text = typeof promises
 
-        if (!(text === 'symbol' || text === 'undefined')) {
+        if (!(text === 'symbol' || text === 'undefined' || text === 'function')) {
           text += ` ${promises}`
         }
 
@@ -203,7 +203,7 @@ class MyPromise {
       if (!isIterable(promises)) {
         let text = typeof promises
 
-        if (!(text === 'symbol' || text === 'undefined')) {
+        if (!(text === 'symbol' || text === 'undefined' || text === 'function')) {
           text += ` ${promises}`
         }
 
@@ -238,25 +238,117 @@ class MyPromise {
     })
   }
 
-  static race() {}
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!isIterable(promises)) {
+        let text = typeof promises
 
-  static try() {}
+        if (!(text === 'symbol' || text === 'undefined' || text === 'function')) {
+          text += ` ${promises}`
+        }
 
-  static allSettled() {}
+        throw new TypeError(`${text} is not iterable (cannot read property Symbol(Symbol.iterator)`)
+      }
+
+      const promiseArr = Array.from(promises)
+
+      promiseArr.forEach((promise) => {
+        if (isPromise(promise)) {
+          promise.then(resolve, reject)
+        } else {
+          resolve(promise)
+        }
+      })
+    })
+  }
+
+  static allSettled(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!isIterable(promises)) {
+        let text = typeof promises
+
+        if (!(text === 'symbol' || text === 'undefined' || text === 'function')) {
+          text += ` ${promises}`
+        }
+
+        throw new TypeError(`${text} is not iterable (cannot read property Symbol(Symbol.iterator)`)
+      }
+
+      const promiseArr = Array.from(promises)
+
+      if (promiseArr.length === 0) {
+        resolve(promiseArr)
+        return
+      }
+
+      const resolves = []
+      let currentIndex = 0
+
+      promiseArr.forEach((promise, index) => {
+        if (isPromise(promise)) {
+          promise.then(
+            (value) => {
+              resolver(value, index, FULFILLED)
+            },
+            (reason) => {
+              resolver(reason, index, REJECTED)
+            }
+          )
+        } else {
+          resolver(promise, index, FULFILLED)
+        }
+      })
+
+      function resolver(value, index, status) {
+        if (status === FULFILLED) {
+          resolves[index] = {
+            status,
+            value
+          }
+        } else {
+          resolves[index] = {
+            status,
+            reason: value
+          }
+        }
+
+        currentIndex++
+
+        if (currentIndex === promiseArr.length) {
+          resolve(resolves)
+        }
+      }
+    })
+  }
+
+  static try(callback, ...args) {
+    return new MyPromise((resolve, reject) => {
+      try {
+        const ret = callback(...args)
+        if (isPromise(ret)) {
+          ret.then(resolve, reject)
+        } else {
+          resolve(ret)
+        }
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
 
   static withResolvers() {
-    let _resolve = null
-    let _reject = null
+    let resolve = null
+    let reject = null
 
-    const promise = new MyPromise((resolve, reject) => {
-      _resolve = resolve
-      _reject = reject
+    const promise = new MyPromise((_resolve, _reject) => {
+      resolve = _resolve
+      reject = _reject
     })
 
     return {
       promise,
-      resolve: _resolve,
-      reject: _reject
+      resolve,
+      reject
     }
   }
 }
@@ -309,7 +401,10 @@ function isObject(value) {
 }
 
 function isIterable(value) {
-  return value && value[Symbol.iterator] && isFunction(value[Symbol.iterator])
+  return (
+    typeof value == 'string' ||
+    (value && value[Symbol.iterator] && isFunction(value[Symbol.iterator]))
+  )
 }
 
 function isString(value) {
@@ -332,32 +427,3 @@ function isPromise(value) {
 // }
 
 // module.exports = MyPromise
-
-// function testAsync() {
-//   return new MyPromise((resolve, reject) => {
-//     setTimeout(resolve, 1000, 1)
-//   })
-// }
-
-// async function main() {
-//   const result = await testAsync()
-//   console.log(result)
-// }
-
-// main()
-
-// const p = Promise.resolve(
-//   new Promise((resolve, reject) => {
-//     // resolve(1)
-//     reject(1)
-//   })
-// )
-
-// p.then(
-//   (value) => {
-//     console.log(value)
-//   },
-//   (reason) => {
-//     console.log(reason)
-//   }
-// )
