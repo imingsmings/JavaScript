@@ -21,10 +21,11 @@ import {
   Platform,
   DeviceEventEmitter,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  PanResponder
 } from 'react-native'
 import TouchableScale from 'react-native-touchable-scale'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 // import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import NotificationComponent from '../components/Notification'
 
@@ -69,6 +70,18 @@ export default function App() {
     setRefreshing(false)
   }
 
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        console.log('Gesture moved', gestureState)
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        console.log('Gesture ended', gestureState)
+      }
+    })
+  ).current
+
   return (
     <>
       {/* <NotificationComponent /> */}
@@ -105,6 +118,15 @@ export default function App() {
       >
         <Text>TouchableScale</Text>
       </TouchableScale>
+
+      <View
+        {...panResponder.panHandlers}
+        style={{
+          height: 500
+        }}
+      >
+        <Text>PanResponder</Text>
+      </View>
 
       {/* <FlatList
         data={data}
