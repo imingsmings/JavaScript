@@ -7,6 +7,8 @@ interface MovieProps {
 }
 
 export default async function MovieDetails({ params }: MovieProps) {
+  throw new Error('Somethig got stuck')
+
   const movieId = (await params).id
   const movies = [
     {
