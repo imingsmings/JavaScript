@@ -18,9 +18,12 @@ import {
   FlatList,
   TextInput,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  DeviceEventEmitter
 } from 'react-native'
 import { useState } from 'react'
+// import PushNotificationIOS from '@react-native-community/push-notification-ios'
+import NotificationComponent from '../components/Notification'
 
 const list: number[] = []
 
@@ -65,7 +68,8 @@ export default function App() {
 
   return (
     <>
-      <FlatList
+      <NotificationComponent />
+      {/* <FlatList
         data={data}
         renderItem={({ item }) => <Text>{item}</Text>}
         refreshControl={
@@ -74,7 +78,7 @@ export default function App() {
             onRefresh={onRefresh}
           />
         }
-      />
+      /> */}
     </>
     // <ScrollView horizontal={false}>
     //   {list.map((item, index) => {
