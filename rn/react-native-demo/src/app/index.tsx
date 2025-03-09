@@ -19,8 +19,11 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native'
+import TouchableScale from 'react-native-touchable-scale'
 import { useState } from 'react'
 // import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import NotificationComponent from '../components/Notification'
@@ -68,7 +71,41 @@ export default function App() {
 
   return (
     <>
-      <NotificationComponent />
+      {/* <NotificationComponent /> */}
+      <TouchableOpacity
+        onPress={() => {
+          alert('Tapped!')
+        }}
+      >
+        <Text>TouchableOpacity</Text>
+      </TouchableOpacity>
+
+      <TouchableHighlight
+        onPress={() => {
+          alert('Tapped!')
+        }}
+        underlayColor='red'
+      >
+        <Text>TouchableHighlight</Text>
+      </TouchableHighlight>
+
+      <TouchableWithoutFeedback
+        onPress={() => {
+          alert('Tapped!')
+        }}
+      >
+        <Text>TouchableWithoutFeedback</Text>
+      </TouchableWithoutFeedback>
+
+      <TouchableScale
+        onPress={() => {
+          alert('Tapped!')
+        }}
+        activeScale={0.8}
+      >
+        <Text>TouchableScale</Text>
+      </TouchableScale>
+
       {/* <FlatList
         data={data}
         renderItem={({ item }) => <Text>{item}</Text>}
