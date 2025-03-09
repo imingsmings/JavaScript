@@ -2,6 +2,7 @@ import { games, categories } from '@/data/games'
 import { FaGamepad, FaCalendarAlt, FaDesktop, FaStar } from 'react-icons/fa'
 
 export default async function GamePage({ params }: { params: Promise<{ slug: string[] }> }) {
+  await new Promise((resolve) => setTimeout(resolve, 2000))
   const { slug } = await params
 
   const [category, gameSlug] = slug
