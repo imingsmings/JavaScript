@@ -1,5 +1,9 @@
 import Link from 'next/link'
 
+export const metadata = {
+  title: 'Movies Page'
+}
+
 export default function MoviesPage() {
   const movies = [
     { id: '1', title: 'Inception' },

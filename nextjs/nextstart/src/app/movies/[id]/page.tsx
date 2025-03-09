@@ -1,13 +1,22 @@
+import { time } from 'console'
 import { FaStar } from 'react-icons/fa'
 
 interface MovieProps {
-  params: {
+  params: Promise<{
     id: string
+  }>
+}
+
+export const generateMetadata = async ({ params }: MovieProps) => {
+  const { id } = await params
+
+  return {
+    title: `Game: ${id}`
   }
 }
 
 export default async function MovieDetails({ params }: MovieProps) {
-  throw new Error('Somethig got stuck')
+  // throw new Error('Somethig got stuck')
 
   const movieId = (await params).id
   const movies = [
