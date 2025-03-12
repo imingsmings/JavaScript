@@ -22,12 +22,14 @@ import {
   DeviceEventEmitter,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  PanResponder
+  PanResponder,
+  Animated
 } from 'react-native'
 import TouchableScale from 'react-native-touchable-scale'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 // import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import NotificationComponent from '../components/Notification'
+import { Link } from 'expo-router'
 
 const list: number[] = []
 
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
 export default function App() {
   const [refreshing, setRefreshing] = useState(false)
   const [data, setData] = useState(['Item 1', 'Item 2', 'Item 3'])
+  const position = useRef(new Animated.ValueXY({ x: 0, y: 0 }))
 
   const onRefresh = () => {
     setRefreshing(true)
@@ -84,8 +87,19 @@ export default function App() {
 
   return (
     <>
+      <Link href='/Home'>Home</Link>
+      <Link href='/About'>About</Link>
+      <Link href='/users/10'>Users 10</Link>
+      <Link
+        href={{
+          pathname: '/users/[id]',
+          params: { id: 20 }
+        }}
+      >
+        Users 20
+      </Link>
       {/* <NotificationComponent /> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           alert('Tapped!')
         }}
@@ -126,7 +140,7 @@ export default function App() {
         }}
       >
         <Text>PanResponder</Text>
-      </View>
+      </View> */}
 
       {/* <FlatList
         data={data}
