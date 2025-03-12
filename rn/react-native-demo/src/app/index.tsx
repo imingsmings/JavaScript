@@ -30,6 +30,7 @@ import { useEffect, useRef, useState } from 'react'
 // import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import NotificationComponent from '../components/Notification'
 import { Link } from 'expo-router'
+import Linking from '../components/Linking'
 
 const list: number[] = []
 
@@ -98,6 +99,7 @@ export default function App() {
       >
         Users 20
       </Link>
+      <Linking></Linking>
       {/* <NotificationComponent /> */}
       {/* <TouchableOpacity
         onPress={() => {
