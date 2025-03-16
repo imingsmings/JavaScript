@@ -2,17 +2,19 @@ import { StyleSheet, Text, TouchableHighlight, View, Image } from 'react-native'
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
 import { defaultStyles } from '@/styles'
-import { Track } from 'react-native-track-player'
+import { Track, useActiveTrack } from 'react-native-track-player'
+import { Entypo } from '@expo/vector-icons'
 
 export type TrackListItemProps = {
   track: Track
+  onTrackSelect: (track: Track) => void
 }
 
-export const TrackListItem = ({ track }: TrackListItemProps) => {
-  const isActiveTrack = false
+export const TrackListItem = ({ track, onTrackSelect }: TrackListItemProps) => {
+  const isActiveTrack = useActiveTrack()?.url === track.url
 
   return (
-    <TouchableHighlight>
+    <TouchableHighlight onPress={() => onTrackSelect(track)}>
       <View style={styles.trackItemContainer}>
         <View>
           <Image
@@ -26,27 +28,42 @@ export const TrackListItem = ({ track }: TrackListItemProps) => {
           />
         </View>
 
-        <View style={{ width: '100%' }}>
-          <Text
-            numberOfLines={1}
-            style={{
-              ...styles.trackTitleText,
-              color: isActiveTrack ? colors.primary : colors.text
-            }}
-          >
-            {track.title}
-          </Text>
-
-          {track.artist && (
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
+          <View style={{ width: '100%' }}>
             <Text
               numberOfLines={1}
               style={{
-                ...styles.trackArtistText
+                ...styles.trackTitleText,
+                color: isActiveTrack ? colors.primary : colors.text
               }}
             >
-              {track.artist}
+              {track.title}
             </Text>
-          )}
+
+            {track.artist && (
+              <Text
+                numberOfLines={1}
+                style={{
+                  ...styles.trackArtistText
+                }}
+              >
+                {track.artist}
+              </Text>
+            )}
+          </View>
+
+          <Entypo
+            name='dots-three-horizontal'
+            size={18}
+            color={colors.icon}
+          />
         </View>
       </View>
     </TouchableHighlight>

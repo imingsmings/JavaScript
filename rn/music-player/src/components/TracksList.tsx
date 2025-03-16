@@ -12,6 +12,10 @@ const ItemDivider = () => {
 }
 
 export const TracksList = ({ tracks, ...props }: TracksListProps) => {
+  const onTrackSelect = (track: Track) => {
+    console.log(track)
+  }
+
   return (
     <FlatList
       data={tracks}
@@ -22,7 +26,12 @@ export const TracksList = ({ tracks, ...props }: TracksListProps) => {
       ListFooterComponent={ItemDivider}
       ItemSeparatorComponent={ItemDivider}
       renderItem={({ item }) => {
-        return <TrackListItem track={item} />
+        return (
+          <TrackListItem
+            track={item}
+            onTrackSelect={onTrackSelect}
+          />
+        )
       }}
       {...props}
     />

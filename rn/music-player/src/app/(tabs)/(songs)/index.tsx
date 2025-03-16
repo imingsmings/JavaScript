@@ -7,7 +7,7 @@ import library from '@/assets/data/library.json'
 import { useMemo } from 'react'
 import { trackTitleFilter } from '@/helpers'
 
-const SongScreen = () => {
+export default () => {
   const search = useNavigationSearch({
     searchBarProps: {
       placeholder: 'Find in songs'
@@ -36,5 +36,3 @@ const SongScreen = () => {
     </View>
   )
 }
-
-export default SongScreen
