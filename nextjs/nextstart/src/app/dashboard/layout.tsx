@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
-const Layout = ({ children }: { children: ReactNode }) => {
+interface Props {
+  children: ReactNode
+}
+const Layout = ({ children, ...props }: Props) => {
   return <main>{children}</main>
 }
 
