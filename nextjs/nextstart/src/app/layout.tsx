@@ -14,8 +14,11 @@ interface Props {
 
 export default function RootLayout(props: Props) {
   return (
-    <html lang='en'>
-      <body>
+    <html
+      lang='en'
+      className='h-full'
+    >
+      <body className='h-full'>
         {props.children}
         {props.member}
         {props.team}
