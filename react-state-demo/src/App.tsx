@@ -1,37 +1,25 @@
-// import { useState } from 'react'
-import { create } from 'zustand'
+// import ZustandDemo from './components/ZustandDemo'
+// import WithoutTanStackQuery from './tanstackquery/WithoutTanStackQuery'
+// import WithTanStackQuery from './tanstackquery/WithTanStackQuery'
+// import Deduplication from './tanstackquery/Deduplication'
+// import StaleTime from './tanstackquery/StaleTime'
+import RefetchInterval from './tanstackquery/RefetchInterval'
 
-type State = {
-  count: number
-}
-
-type StateAction = {
-  inc: () => void
-  dec: () => void
-}
-
-const useStore = create<State & StateAction>((set) => {
-  return {
-    count: 0,
-    inc: () => {
-      set((state) => ({ ...state, count: state.count + 1 }))
-    },
-    dec: () => {
-      set((state) => ({ ...state, count: state.count - 1 }))
-    }
-  }
-})
-
-function App() {
-  const { count, inc, dec } = useStore()
-
+export default function App() {
   return (
     <>
-      <p>{count}</p>
-      <button onClick={inc}>+</button>
-      <button onClick={dec}>-</button>
+      {/* <ZustandDemo></ZustandDemo> */}
+      {/* <h1 className='text-3xl font-bold underline'>Hello world!</h1> */}
+
+      {/* <WithoutTanStackQuery /> */}
+      {/* <WithTanStackQuery /> */}
+
+      {/* <Deduplication />
+      <Deduplication /> */}
+
+      {/* <StaleTime /> */}
+
+      <RefetchInterval />
     </>
   )
 }
-
-export default App
