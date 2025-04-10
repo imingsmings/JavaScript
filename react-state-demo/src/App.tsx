@@ -3,7 +3,10 @@
 // import WithTanStackQuery from './tanstackquery/WithTanStackQuery'
 // import Deduplication from './tanstackquery/Deduplication'
 // import StaleTime from './tanstackquery/StaleTime'
-import RefetchInterval from './tanstackquery/RefetchInterval'
+// import RefetchInterval from './tanstackquery/RefetchInterval'
+// import FetchMultiple from './tanstackquery/FetchMultiple'
+// import MutatingData from './tanstackquery/MutatingData'
+import Pagination from './tanstackquery/Pagination'
 
 export default function App() {
   return (
@@ -19,7 +22,12 @@ export default function App() {
 
       {/* <StaleTime /> */}
 
-      <RefetchInterval />
+      {/* <RefetchInterval /> */}
+
+      {/* <FetchMultiple /> */}
+
+      {/* <MutatingData /> */}
+      <Pagination />
     </>
   )
 }
