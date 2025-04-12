@@ -34,4 +34,15 @@ describe('Math Utils', () => {
   test('should throw new error when dividing by zero', () => {
     expect(() => divide(2, 0)).toThrow('Division by zero is not allowed')
   })
+
+  test.each([
+    [2, 3, 6],
+    [2, 4, 8],
+    [4, 5, 20],
+    [7, 8, 56],
+    [1, 0, 0],
+    [-2, 3, -6]
+  ])('should return correct result when multiplying %d and %d (expected: %d)', (a, b, expectedResult) => {
+    expect(multiply(a, b)).toBe(expectedResult)
+  })
 })
