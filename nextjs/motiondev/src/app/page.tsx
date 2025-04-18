@@ -3,7 +3,8 @@
 // import Keyframe from './components/Keyframe'
 // import Variant from './components/Variant'
 // import Gesture from './components/Gesture'
-import Stagger from './components/Stagger'
+// import Stagger from './components/Stagger'
+import MotionValue from './hooks/MotionValue'
 
 export default function App() {
   return (
@@ -13,7 +14,8 @@ export default function App() {
       {/* <Keyframe></Keyframe> */}
       {/* <Variant></Variant> */}
       {/* <Gesture></Gesture> */}
-      <Stagger></Stagger>
+      {/* <Stagger></Stagger> */}
+      <MotionValue></MotionValue>
     </div>
   )
 }
