@@ -2,7 +2,8 @@
 // import Transition from './components/Transition'
 // import Keyframe from './components/Keyframe'
 // import Variant from './components/Variant'
-import Gesture from './components/Gesture'
+// import Gesture from './components/Gesture'
+import Stagger from './components/Stagger'
 
 export default function App() {
   return (
@@ -11,7 +12,8 @@ export default function App() {
       {/* <Transition></Transition> */}
       {/* <Keyframe></Keyframe> */}
       {/* <Variant></Variant> */}
-      <Gesture></Gesture>
+      {/* <Gesture></Gesture> */}
+      <Stagger></Stagger>
     </div>
   )
 }
