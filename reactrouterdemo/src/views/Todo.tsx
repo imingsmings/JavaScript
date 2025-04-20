@@ -1,15 +1,16 @@
 // import { useEffect } from 'react'
 import {
-  useLocation,
+  useLoaderData,
+  // useLocation,
   useNavigate
   //  useParams
 } from 'react-router'
 
 function Todo() {
   // const { id } = useParams()
-  const { state } = useLocation()
+  // const { state } = useLocation()
   const navigate = useNavigate()
-
+  const state = useLoaderData()
   console.log(state)
 
   // useEffect(() => {
