@@ -1,12 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
-  component: RouteComponent
+  component: RouteComponent,
+  loader: ({ params }) => {
+    console.log(params)
+  }
 })
 
 function RouteComponent() {
-  const params = Route.useParams()
-  console.log(params)
+  // const params = Route.useParams()
+  const params = useParams({ strict: false })
+  // console.log(params)
 
   return <div>Hello {params.postId}</div>
 }
