@@ -23,8 +23,7 @@ export const Route = createFileRoute('/posts/')({
       id: search.postId
     }
   },
-  loader: async (options) => {
-    console.log(options)
+  loader: async () => {
     // throw new Error('Error occurs')
     await new Promise((resolve) => setTimeout(resolve, 2000))
     return todoData
