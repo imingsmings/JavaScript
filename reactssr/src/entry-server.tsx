@@ -15,10 +15,14 @@ import App from './App.tsx'
 //   return { html }
 // }
 
-export function render(options: RenderToPipeableStreamOptions) {
+interface Props {
+  data: object
+}
+export function render(options: RenderToPipeableStreamOptions, props?: Props) {
+  const appProps = props || {}
   const { pipe } = renderToPipeableStream(
     <StrictMode>
-      <App />
+      <App {...appProps} />
     </StrictMode>,
     options
   )

@@ -4,16 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "bun --watch ./server.ts"
+    "dev": "bun --watch ./server.ts",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:client": "vite build --config vite.config.ts",
+    "build:server": "vite build --config vite.ssr.config.ts",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "release": "pnpm run build && pnpm run start",
+    "lint": "eslint ."
   },
   "dependencies": {
     "express": "^5.1.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "sirv": "^3.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
@@ -22,6 +25,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.25.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -29,6 +33,7 @@
     "tailwindcss": "^4.1.4",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.31.1",
-    "vite": "^6.3.3"
+    "vite": "^6.3.3",
+    "vite-plugin-static-copy": "^2.3.1"
   }
 }
