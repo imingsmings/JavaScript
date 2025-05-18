@@ -3,9 +3,6 @@ import react from '@vitejs/plugin-react-swc'
 import taiwlwindcss from '@tailwindcss/vite'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import { readFileSync } from 'node:fs'
-import os from 'node:os'
-
-const homeDir = os.homedir()
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -19,8 +16,8 @@ export default defineConfig({
   ],
   server: {
     https: {
-      key: readFileSync(`${homeDir}/devhttps/dev-key.pem`),
-      cert: readFileSync(`${homeDir}/devhttps/dev.pem`)
+      key: readFileSync(process.env.SSL_KEY!),
+      cert: readFileSync(process.env.SSL_CERT!)
     }
   }
 })

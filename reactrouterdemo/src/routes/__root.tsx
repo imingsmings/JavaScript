@@ -42,6 +42,12 @@ function RootComponent() {
         >
           Posts
         </Link>
+        <Link
+          to='/upload'
+          {...linkProps}
+        >
+          Upload
+        </Link>
       </div>
       <hr />
       <Outlet />
