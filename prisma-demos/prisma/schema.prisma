@@ -5,18 +5,36 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// for sqlite3
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
+
+// model Movie {
+//   id          Int      @id @default(autoincrement())
+//   title       String
+//   description String
+//   genre       String
+//   releaseDate DateTime
+//   rating      Float?
+//   createAt    DateTime @default(now())
+//   updateAt    DateTime @updatedAt
+// }
+
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
 }
 
-model Movie {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  genre       String
-  releaseDate DateTime
-  rating      Float?
-  createAt    DateTime @default(now())
-  updateAt    DateTime @updatedAt
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  age       Int?
+  isActive  Boolean?
+  tags      String[]
+  createdAt DateTime @default(now())
+
+  @@map("users")
 }

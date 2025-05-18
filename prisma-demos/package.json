@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sync": "bun ./src/index.ts"
+    "sync": "bun ./src/mongo.ts",
+    "dev":"bun ./src/mongo.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.7.0",
+  "packageManager": "pnpm@10.11.0",
   "devDependencies": {
-    "@types/node": "^22.13.14",
-    "prisma": "^6.5.0",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.15.18",
+    "prisma": "^6.8.2",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@prisma/client": "6.5.0"
