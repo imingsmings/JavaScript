@@ -6,12 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  UseInterceptors,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { PersonGuard } from './person.guard';
+import { TimeoutInterceptor } from 'src/timeout/timeout.interceptor';
+import { ValidatePipe } from 'src/validate.pipe';
 
 @Controller('person')
+@UseGuards(PersonGuard)
+@UseInterceptors(TimeoutInterceptor)
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
@@ -36,7 +44,8 @@ export class PersonController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
+    console.log('person delete ---' + id);
     return this.personService.remove(+id);
   }
 }
