@@ -12,6 +12,6 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "cos-nodejs-sdk-v5": "^2.15.0"
+    "cos-nodejs-sdk-v5": "^2.15.1"
   }
 }
