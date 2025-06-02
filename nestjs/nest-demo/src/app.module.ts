@@ -10,6 +10,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Global()
 @Module({
@@ -25,6 +26,17 @@ import crypto from 'node:crypto';
           cb(null, filename);
         },
       }),
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: '127.0.0.1',
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'nodejs',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+      timezone: 'Z',
     }),
   ],
   controllers: [AppController],

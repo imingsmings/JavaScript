@@ -15,7 +15,6 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonGuard } from './person.guard';
 import { TimeoutInterceptor } from 'src/timeout/timeout.interceptor';
-import { ValidatePipe } from 'src/validate.pipe';
 
 @Controller('person')
 @UseGuards(PersonGuard)
@@ -23,7 +22,7 @@ import { ValidatePipe } from 'src/validate.pipe';
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personService.create(createPersonDto);
   }
