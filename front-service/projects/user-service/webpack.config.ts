@@ -15,17 +15,23 @@ const config: BaseConfiguration & DevConfiguration = {
     filename: 'user.js',
     publicPath: '/',
     clean: true,
-    libraryTarget: 'system'
+    // libraryTarget: 'system',
+    library: {
+      type: 'module'
+    }
+  },
+  experiments: {
+    outputModule: true
   },
   devtool: 'eval-cheap-module-source-map',
   devServer: {
     open: false,
-    port: 3001,
+    port: 4001,
     static: {
       directory: path.join(__dirname, 'dist')
     },
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3000'
+      'Access-Control-Allow-Origin': 'http://localhost:4000'
     }
   },
   resolve: {

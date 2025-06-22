@@ -41,7 +41,7 @@ createRoot(container).render(<RouterProvider router={router} />)
 
 registerApplication({
   appName: 'user',
-  applicationOrLoadingFn: () => System.import('http://localhost:3001/user.js'),
+  applicationOrLoadingFn: () => import('http://localhost:4001/user.js'),
   activityFn: () => {
     return window.location.hash.startsWith('#/user')
   },
@@ -52,7 +52,7 @@ registerApplication({
 
 registerApplication({
   appName: 'order',
-  applicationOrLoadingFn: () => System.import('http://localhost:3002/order.js'),
+  applicationOrLoadingFn: () => import('http://localhost:4002/order.js'),
   activityFn: () => {
     return window.location.hash.startsWith('#/order')
   },

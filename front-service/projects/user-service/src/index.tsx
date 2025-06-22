@@ -32,6 +32,7 @@ export async function mount(props: AppProps) {
 export async function unmount(props: AppProps) {
   // LifeCycle.unmount(props)
   app && app.unmount()
+  app = null
 }
 
 function render(props: AppProps) {

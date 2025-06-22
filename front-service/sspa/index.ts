@@ -72,6 +72,8 @@ function handleUnmountApp(appName: string) {
 
 function handleRouter() {
   const rawPushState = window.history.pushState
+  currentApp = location.hash.slice(2)
+  handelMountApp(currentApp)
 
   window.history.pushState = async function (...args) {
     prevApp = location.hash.slice(2)

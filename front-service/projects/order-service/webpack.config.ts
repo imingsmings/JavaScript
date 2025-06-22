@@ -15,17 +15,22 @@ const config: BaseConfiguration & DevConfiguration = {
     filename: 'order.js',
     publicPath: '/',
     clean: true,
-    libraryTarget: 'system'
+    library: {
+      type: 'module'
+    }
+  },
+  experiments: {
+    outputModule: true
   },
   devtool: 'eval-cheap-module-source-map',
   devServer: {
     open: false,
-    port: 3002,
+    port: 4002,
     static: {
       directory: path.join(__dirname, 'dist')
     },
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:3000'
+      'Access-Control-Allow-Origin': 'http://localhost:4000'
     }
   },
   resolve: {

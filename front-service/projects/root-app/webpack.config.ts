@@ -22,7 +22,7 @@ const config: BaseConfiguration & DevConfiguration = {
   devtool: 'eval-cheap-module-source-map',
   devServer: {
     open: false,
-    port: 3000,
+    port: 4000,
     static: {
       directory: path.join(__dirname, 'dist')
     }
