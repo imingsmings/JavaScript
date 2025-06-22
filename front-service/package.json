@@ -1,0 +1,43 @@
+{
+  "name": "front-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:root": "NODE_OPTIONS='--import tsx' pnpm --filter root-app start",
+    "start:user": "NODE_OPTIONS='--import tsx' pnpm --filter user-service start",
+    "start:order": "NODE_OPTIONS='--import tsx' pnpm --filter order-service start",
+    "build:root": "NODE_OPTIONS='--import tsx' pnpm --filter root-app build",
+    "build:user": "NODE_OPTIONS='--import tsx' pnpm --filter user-service build",
+    "build:order": "NODE_OPTIONS='--import tsx' pnpm --filter order-service build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.1",
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/systemjs": "^6.15.3",
+    "babel-loader": "^10.0.0",
+    "html-webpack-plugin": "^5.6.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.6.2",
+    "single-spa": "^6.0.3",
+    "single-spa-react": "^6.0.2"
+  }
+}
