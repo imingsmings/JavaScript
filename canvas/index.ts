@@ -1,0 +1,118 @@
+type Canvas = CanvasRenderingContext2D
+type CanvasElement = HTMLCanvasElement
+
+/**
+能模块
+方法 / 属性
+说明
+一、路径构造（Path Creation）
+beginPath() closePath() moveTo() lineTo() rect() roundRect() arc() arcTo() ellipse() quadraticCurveTo() bezierCurveTo() addPath()
+构建/追加当前路径的线段、圆弧、贝塞尔、矩形等
+二、路径渲染 & 裁剪
+fill() stroke() clip() fillRule(参数) strokeStyle fillStyle
+将路径填充/描边或设为裁剪区
+三、命中测试
+isPointInPath() isPointInStroke()
+判断坐标是否落在当前/指定路径或描边内
+四、快速矩形原语
+fillRect() strokeRect() clearRect()
+直接对矩形区域进行填充、描边或擦除
+五、线段样式
+lineWidth lineCap lineJoin miterLimit lineDashOffset setLineDash() getLineDash()
+线宽、端点、转角、斜接、虚线
+六、填充/描边样式
+fillStyle / strokeStyle createLinearGradient() createRadialGradient() createConicGradient() createPattern() globalAlpha
+纯色、渐变、图案与全局透明度
+七、文本
+fillText() strokeText() measureText() ；font textAlign textBaseline direction textRendering letterSpacing* wordSpacing* fontKerning* fontStretch* fontVariantCaps*
+绘制/测量文本及其排版样式（为实验/部分浏览器特性）
+八、图像 & 像素
+drawImage() createImageData() getImageData() putImageData() imageSmoothingEnabled imageSmoothingQuality
+贴图、离屏像素缓冲、像素读写与缩放质量
+九、阴影 & 滤镜
+shadowBlur shadowColor shadowOffsetX/Y filter
+投影与 CSS-like 滤镜（模糊、灰度等）
+十、全局合成 & 透明度
+globalCompositeOperation
+29 种 Porter-Duff / CSS 混合模式
+十一、坐标变换
+translate() rotate() scale() transform() setTransform() resetTransform() getTransform()
+平移、旋转、缩放、矩阵乘/设/查询、重置
+十二、状态栈管理
+save() restore() reset()
+压栈 / 弹栈保存或一次性恢复所有绘图状态
+十三、可访问性辅助
+drawFocusIfNeeded()
+为可聚焦元素绘制焦点环（配合 Canvas 可获键盘焦点时）
+十四、上下文/画布信息
+canvas getContextAttributes() isContextLost()
+取宿主 <canvas>、查询初始化参数、检测上下文丢失
+ */
+
+const canvas = document.getElementById('canvas') as CanvasElement
+const ctx = canvas.getContext('2d') as Canvas
+
+console.log(ctx)
+
+/** 1. 矩形相关 */
+// ctx.fillStyle = 'orange'
+// ctx.fillRect(50, 50, 100, 100)
+// ctx.clearRect(75, 75, 50, 50)
+// ctx.strokeStyle = 'orange'
+// ctx.lineWidth = 10
+// ctx.strokeRect(50, 50, 100, 100)
+// ctx.fillStyle = 'green'
+// ctx.fillRect(50, 50, 100, 100)
+
+/**
+ * 2. 三角形
+ *  创建路径 -> 图形命令绘制路径 -> 描边或填充
+ * */
+
+// ctx.beginPath()
+// ctx.strokeStyle = 'orange'
+// ctx.lineWidth = 10
+// ctx.moveTo(50, 50)
+// ctx.lineTo(100, 100)
+// ctx.lineTo(150, 50)
+// ctx.closePath()
+// ctx.stroke()
+
+/**
+ * 3. 圆/弧
+ *  64 -> ?
+ *  360 -> 2PI
+ *  64 * 2PI / 360
+ * */
+// ctx.beginPath()
+// ctx.strokeStyle = 'orange'
+// ctx.arc(60, 60, 50, 0, 2 * Math.PI, false)
+// ctx.arc(60, 60, 50, 0, ((2 * Math.PI) / 360) * 64, true)
+// ctx.stroke()
+
+// 圆弧
+// ctx.moveTo(150, 20)
+// ctx.arcTo(150, 100, 50, 20, 30)
+// ctx.lineTo(50, 20)
+// ctx.stroke()
+
+/** 4. 贝塞尔曲线 */
+// ctx.beginPath()
+// ctx.moveTo(50, 50)
+// ctx.quadraticCurveTo(230, 100, 50, 100)
+// ctx.stroke()
+
+// ctx.beginPath()
+// ctx.moveTo(50, 50)
+// ctx.bezierCurveTo(230, 30, 150, 60, 50, 100)
+// ctx.stroke()
+
+/** 5. 坐标转换 */
+// ctx.translate(50, 50)
+// ctx.fillRect(0, 0, 50, 50)
+
+// ctx.scale(2, 1)
+ctx.fillRect(20, 20, 50, 50)
+ctx.rotate((Math.PI / 180) * 10)
+ctx.fillStyle = 'green'
+ctx.fillRect(20, 20, 50, 50)
