@@ -112,7 +112,60 @@ console.log(ctx)
 // ctx.fillRect(0, 0, 50, 50)
 
 // ctx.scale(2, 1)
-ctx.fillRect(20, 20, 50, 50)
-ctx.rotate((Math.PI / 180) * 10)
-ctx.fillStyle = 'green'
-ctx.fillRect(20, 20, 50, 50)
+// ctx.fillRect(20, 20, 50, 50)
+// ctx.rotate((Math.PI / 180) * 10)
+// ctx.fillStyle = 'green'
+// ctx.fillRect(20, 20, 50, 50)
+
+// pattern
+// const img = new Image()
+// img.onload = function () {
+//   const pattern = ctx.createPattern(img, 'no-repeat')!
+//   ctx.fillStyle = pattern
+//   ctx.fillRect(0, 0, 300, 150)
+// }
+// img.src = 'https://fastly.picsum.photos/id/331/300/150.jpg?hmac=3ee61CvADO1GbuILb3yrytfgg9rWwwAt16SMu6m4CgY'
+
+// 渐变
+// const gradient = ctx.createLinearGradient(0, 0, 200, 200)
+// const gradient = ctx.createRadialGradient(100, 100, 50, 100, 100, 100)
+// gradient.addColorStop(0, 'red')
+// gradient.addColorStop(0.5, 'yellow')
+// gradient.addColorStop(1, 'blue')
+// ctx.fillStyle = gradient
+// ctx.fillRect(0, 0, 200, 200)
+
+// 阴影
+// ctx.shadowColor = '#00f'
+// ctx.shadowOffsetX = 30
+// ctx.shadowOffsetY = 10
+// ctx.shadowBlur = 15
+// ctx.fillStyle = 'red'
+// ctx.fillRect(50, 50, 100, 100)
+
+// 文字
+// ctx.font = '50px sans-serif'
+// ctx.fillStyle = 'red'
+// ctx.fillText('Hello World', 100, 50)
+// ctx.fillText('哈哈, 煞笔', 100, 150)
+
+// cap
+// ctx.beginPath()
+// ctx.moveTo(30, 30)
+// ctx.lineTo(150, 30)
+// ctx.lineWidth = 20
+// ctx.lineCap = 'butt'
+// ctx.lineCap = 'round'
+// ctx.lineCap = 'square'
+// ctx.stroke()
+
+// miter
+ctx.beginPath()
+ctx.moveTo(30, 200)
+ctx.lineWidth = 20
+// ctx.lineJoin = 'miter'
+ctx.lineJoin = 'bevel'
+// ctx.lineJoin = 'round'
+ctx.lineTo(150, 30)
+ctx.lineTo(300, 200)
+ctx.stroke()
