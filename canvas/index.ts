@@ -307,4 +307,65 @@ function draw() {
   window.requestAnimationFrame(draw)
 }
 
-window.requestAnimationFrame(draw)
+// window.requestAnimationFrame(draw)
+
+// 拾色器
+// earth.onload = function () {
+//   ctx.drawImage(earth, 0, 0)
+// }
+
+const oBox = document.getElementById('box')
+
+function pickColor(e: MouseEvent) {
+  const x = e.layerX
+  const y = e.layerY
+  const imageData = ctx.getImageData(x, y, 1, 1)
+  const [r, g, b, a] = imageData.data
+
+  const rgba = `rgba(${r}, ${g}, ${b}, ${a / 255})`
+  oBox!.textContent = rgba
+  oBox!.style.backgroundColor = rgba
+}
+
+canvas.addEventListener('click', pickColor, false)
+
+// 像素操作
+const w = ctx.canvas.width
+const h = ctx.canvas.height
+const invertBtn = document.getElementById('invert')
+const grayBtn = document.getElementById('gray')
+const resetBtn = document.getElementById('reset')
+
+earth.onload = function () {
+  operate(earth)
+}
+
+function operate(img: InstanceType<typeof Image>) {
+  ctx.drawImage(img, 0, 0)
+  const imageData = ctx.getImageData(0, 0, w, h)
+  const data = imageData.data
+
+  function invert() {
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255 - data[i]
+      data[i + 1] = 255 - data[i + 1]
+      data[i + 2] = 255 - data[i + 2]
+    }
+
+    ctx.putImageData(imageData, 0, 0)
+  }
+
+  function gray() {
+    for (let i = 0; i < data.length; i += 4) {
+      const avg = (data[i] + data[i + 1] + data[i + 2]) / 3
+      data[i] = avg
+      data[i + 1] = avg
+      data[i + 2] = avg
+    }
+
+    ctx.putImageData(imageData, 0, 0)
+  }
+
+  invertBtn?.addEventListener('click', invert, false)
+  grayBtn?.addEventListener('click', gray, false)
+}
