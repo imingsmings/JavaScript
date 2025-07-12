@@ -52,7 +52,7 @@ canvas getContextAttributes() isContextLost()
 const canvas = document.getElementById('canvas') as CanvasElement
 const ctx = canvas.getContext('2d') as Canvas
 
-console.log(ctx)
+// console.log(ctx)
 
 /** 1. 矩形相关 */
 // ctx.fillStyle = 'orange'
@@ -159,13 +159,61 @@ console.log(ctx)
 // ctx.lineCap = 'square'
 // ctx.stroke()
 
-// miter
-ctx.beginPath()
-ctx.moveTo(30, 200)
-ctx.lineWidth = 20
+// join
+// ctx.beginPath()
+// ctx.moveTo(30, 200)
+// ctx.lineWidth = 20
 // ctx.lineJoin = 'miter'
-ctx.lineJoin = 'bevel'
+// ctx.lineJoin = 'bevel'
 // ctx.lineJoin = 'round'
-ctx.lineTo(150, 30)
-ctx.lineTo(300, 200)
-ctx.stroke()
+// ctx.lineTo(150, 30)
+// ctx.lineTo(300, 200)
+// ctx.stroke()
+
+// globalAlpha
+// ctx.globalAlpha = 0.5
+// ctx.fillStyle = 'blue'
+// ctx.fillRect(0, 0, 100, 100)
+
+// clip
+// ctx.beginPath()
+// ctx.arc(100, 100, 50, 0, 2 * Math.PI, false)
+// ctx.stroke()
+// ctx.clip()
+
+// ctx.fillStyle = 'blue'
+// ctx.fillRect(0, 0, 100, 100)
+
+// drawImage
+// const img = new Image()
+// img.src = 'https://fastly.picsum.photos/id/331/300/150.jpg?hmac=3ee61CvADO1GbuILb3yrytfgg9rWwwAt16SMu6m4CgY'
+// img.onload = function () {
+//   ctx.drawImage(img, 50, 50, 100, 100, 0, 0, 200, 200)
+// }
+// console.log(canvas.toDataURL())
+
+// isPointInPath/isPointInStroke
+// ctx.rect(100, 100, 100, 100)
+// ctx.fillStyle = 'skyblue'
+// ctx.fill()
+// console.log(ctx.isPointInPath(100, 100)) // true
+// console.log(ctx.isPointInPath(100, 99)) // false
+
+// getImageData/putImageData
+// ctx.rect(100, 100, 100, 100)
+// ctx.fillStyle = 'skyblue'
+// ctx.fill()
+// const imageData = ctx.getImageData(100, 100, 50, 50)
+// ctx.putImageData(imageData, 0, 0)
+// console.log(imageData)
+
+//
+ctx.fillStyle = 'red'
+ctx.fillRect(20, 20, 200, 200)
+// ctx.globalCompositeOperation = 'source-over'
+// ctx.globalCompositeOperation = 'source-in'
+// ctx.globalCompositeOperation = 'source-out'
+// ctx.globalCompositeOperation = 'source-atop'
+ctx.globalCompositeOperation = 'destination-atop'
+ctx.fillStyle = 'blue'
+ctx.fillRect(30, 30, 200, 200)
