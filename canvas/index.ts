@@ -344,6 +344,10 @@ function operate(img: InstanceType<typeof Image>) {
   ctx.drawImage(img, 0, 0)
   const imageData = ctx.getImageData(0, 0, w, h)
   const data = imageData.data
+  const originData: number[] = data.reduce((prev: number[], item: number) => {
+    prev.push(item)
+    return prev
+  }, [])
 
   function invert() {
     for (let i = 0; i < data.length; i += 4) {
@@ -366,6 +370,15 @@ function operate(img: InstanceType<typeof Image>) {
     ctx.putImageData(imageData, 0, 0)
   }
 
+  function reset() {
+    for (let i = 0; i < originData.length; i++) {
+      data[i] = originData[i]
+    }
+
+    ctx.putImageData(imageData, 0, 0)
+  }
+
   invertBtn?.addEventListener('click', invert, false)
   grayBtn?.addEventListener('click', gray, false)
+  resetBtn?.addEventListener('click', reset, false)
 }
