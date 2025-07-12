@@ -207,13 +207,104 @@ const ctx = canvas.getContext('2d') as Canvas
 // ctx.putImageData(imageData, 0, 0)
 // console.log(imageData)
 
-//
-ctx.fillStyle = 'red'
-ctx.fillRect(20, 20, 200, 200)
+// globalCompositeOperation
+// ctx.fillStyle = 'red'
+// ctx.fillRect(20, 20, 200, 200)
 // ctx.globalCompositeOperation = 'source-over'
 // ctx.globalCompositeOperation = 'source-in'
 // ctx.globalCompositeOperation = 'source-out'
 // ctx.globalCompositeOperation = 'source-atop'
-ctx.globalCompositeOperation = 'destination-atop'
-ctx.fillStyle = 'blue'
-ctx.fillRect(30, 30, 200, 200)
+// ctx.globalCompositeOperation = 'destination-atop'
+// ctx.fillStyle = 'blue'
+// ctx.fillRect(30, 30, 200, 200)
+
+// closePath 只闭合最后一条子路径
+// ctx.beginPath()
+// ctx.moveTo(20, 140)
+// ctx.lineTo(120, 10)
+// ctx.lineTo(220, 140)
+// ctx.lineTo(20, 140)
+// ctx.closePath()
+// ctx.lineWidth = 10
+// ctx.stroke()
+
+// ctx.beginPath()
+// ctx.arc(240, 20, 40, 0, Math.PI, false)
+// ctx.moveTo(100, 20)
+// ctx.arc(60, 20, 40, 0, Math.PI, false)
+// ctx.moveTo(215, 80)
+// ctx.arc(150, 80, 65, 0, Math.PI, false)
+// ctx.closePath()
+// ctx.lineWidth = 6
+// ctx.stroke()
+
+// drawImage 参数 d代表目标 s代表源
+// 三个参数：source dx dy
+// 五个参数：source dx dy dw dh
+// 九个参数：source sx sy sw sh dx dy dw dh
+// const img = new Image()
+
+// img.onload = function () {
+// ctx.drawImage(this as CanvasImageSource, 0, 0)
+// ctx.drawImage(this as CanvasImageSource, 0, 0, 200, 100)
+// for (let i = 0; i < 4; i++) {
+//   for (let j = 0; j < 3; j++) {
+//     ctx.drawImage(this as CanvasImageSource, j * 100, i * 100, 100, 100)
+//   }
+// }
+// ctx.drawImage(this as CanvasImageSource, 0, 0, 100, 100, 50, 50, 100, 100)
+// }
+
+// img.src = 'https://fastly.picsum.photos/id/331/300/150.jpg?hmac=3ee61CvADO1GbuILb3yrytfgg9rWwwAt16SMu6m4CgY'
+
+// 动画步骤
+// 1. 清空canvas  2. 保存canvas状态 3. 绘制新图形 4. 恢复canvas状态
+const sun = new Image()
+const earth = new Image()
+const moon = new Image()
+sun.src = '/sun.jpg'
+earth.src = '/earth.png'
+moon.src = '/moon.jpg'
+
+function draw() {
+  ctx.clearRect(0, 0, 700, 400)
+
+  ctx.globalCompositeOperation = 'destination-over'
+
+  // 保存canvas状态,准备绘制帧
+  ctx.save()
+
+  // 先将地球移到太阳中心
+  ctx.translate(320, 180)
+  const time = new Date()
+  const seconds = time.getSeconds()
+  const milliSeconds = time.getMilliseconds()
+  // 旋转
+  const theta = 2 * Math.PI * (seconds / 60 + milliSeconds / 60000)
+
+  ctx.rotate(theta)
+  // 再将地球移到轨道
+  ctx.translate(135, 0)
+  // 绘制地球
+  ctx.drawImage(earth, 0, 0, 30, 30)
+
+  ctx.rotate(2 * Math.PI * (seconds / 6 + milliSeconds / 6000))
+  ctx.translate(40, -20)
+  ctx.drawImage(moon, 0, 0, 20, 20)
+
+  // 恢复canvas状态
+  ctx.restore()
+
+  // 绘制轨道
+  ctx.beginPath()
+  ctx.strokeStyle = 'rgba(0,153,255,0.4)'
+  ctx.arc(320, 180, 150, 0, 2 * Math.PI, false)
+  ctx.stroke()
+
+  // 绘制太阳
+  ctx.drawImage(sun, 0, 0)
+
+  window.requestAnimationFrame(draw)
+}
+
+window.requestAnimationFrame(draw)
