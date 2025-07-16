@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #svg {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <!-- <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="8,12 11,15 16,9"/>
+  </svg>
+  <svg viewBox="0 0 300 150" width="900" height="450">
+    <circle cx="150" cy="75" r="50" />
+  </svg> -->
+  <svg id="svg" width="500" height="500">
+    <!-- <text x="50" y="50" font-size="30px">
+      这是一段 <tspan font-weight="bolder" fill="orange">加粗的橙色文字</tspan>
+    </text> -->
+
+    <!-- group -->
+    <!-- <g fill="orange">
+        <rect x="100" y="100" width="50" height="50" transform="rotate(30)" />
+        <circle cx="300" cy="100" r="50" transform="translate(100, 0)" />
+        <rect x="50" y="50" width="50" height="50" transform="scale(2, 2)" />
+    </g> -->
+
+    <defs>
+        <clipPath id="cut">
+            <rect x="0" y="0" width="90" height="90" />
+        </clipPath>
+    </defs>
+    <circle cx="50" cy="50" r="50" clip-path="url(#cut)" />
+  </svg>
+</body>
+</html>
