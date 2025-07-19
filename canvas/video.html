@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Video</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" src="/watch.mp4" playsinline controls width="600"></video>
+  <canvas id="canvas" width="600" height="300"></canvas>
+  <div class="toolbar">
+    <input id="comment" type="text" />
+    <button id="send">发送</button>
+    <button id="open">开启弹幕</button>
+    <button id="close">关闭弹幕</button>
+  </div>
+  <script type="module" src="./video.ts"></script>  
+</body>
+</html>
