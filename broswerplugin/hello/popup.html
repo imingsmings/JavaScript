@@ -4,9 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style> 
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 10px;
+      width: 600px;
+    }
+
+    .color {
+      width: 100px;
+      height: 100px;
+    }
+
+    .red {
+      background-color: red;
+    }
+
+    .green {
+      background-color: green;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+    .white {
+      background-color: #fff
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello</h1>
+    <!-- "default_popup": "popup.html", -->
+  <div class="container">
+    <div class="color red" data-color="red"></div>
+    <div class="color green" data-color="green"></div>
+    <div class="color blue" data-color="blue"></div>
+    <div class="color white" data-color="white"></div>
+  </div>
   <script src="./popup.js"></script>
 </body>
 </html>
