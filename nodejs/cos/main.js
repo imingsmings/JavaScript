@@ -33,4 +33,4 @@ async function upload(dir, filePath) {
   console.log(staticPath)
 }
 
-upload('nodejs', '/Users/jason/Downloads/orm.png')
+upload('web', '/Users/jason/Downloads/yjs.png')
