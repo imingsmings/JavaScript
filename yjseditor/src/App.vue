@@ -62,10 +62,6 @@ onMounted(() => {
   });
 
   channel.addEventListener("message", (event) => {
-    console.log(
-      event
-    );
-    
     Y.applyUpdate(doc, event.data); 
   });
 
