@@ -12,12 +12,15 @@ importers:
         specifier: ^0.178.0
         version: 0.178.0
     devDependencies:
+      '@types/node':
+        specifier: ^24.1.0
+        version: 24.1.0
       '@types/three':
         specifier: ^0.178.1
         version: 0.178.1
       vite:
         specifier: ^7.0.6
-        version: 7.0.6
+        version: 7.0.6(@types/node@24.1.0)
 
 packages:
 
@@ -286,6 +289,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/node@24.1.0':
+    resolution: {integrity: sha512-ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w==}
+
   '@types/stats.js@0.17.4':
     resolution: {integrity: sha512-jIBvWWShCvlBqBNIZt0KAshWpvSjhkwkEu4ZUcASoAvhmrgAUI2t1dXrjSL4xXVLB4FznPrIsX3nKXFl/Dt4vA==}
 
@@ -353,6 +359,9 @@ packages:
   tinyglobby@0.2.14:
     resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
     engines: {node: '>=12.0.0'}
+
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   vite@7.0.6:
     resolution: {integrity: sha512-MHFiOENNBd+Bd9uvc8GEsIzdkn1JxMmEeYX35tI3fv0sJBUTfW5tQsoaOwuY4KhBI09A3dUJ/DXf2yxPVPUceg==}
@@ -540,6 +549,10 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/node@24.1.0':
+    dependencies:
+      undici-types: 7.8.0
+
   '@types/stats.js@0.17.4': {}
 
   '@types/three@0.178.1':
@@ -643,7 +656,9 @@ snapshots:
       fdir: 6.4.6(picomatch@4.0.3)
       picomatch: 4.0.3
 
-  vite@7.0.6:
+  undici-types@7.8.0: {}
+
+  vite@7.0.6(@types/node@24.1.0):
     dependencies:
       esbuild: 0.25.8
       fdir: 6.4.6(picomatch@4.0.3)
@@ -652,4 +667,5 @@ snapshots:
       rollup: 4.46.1
       tinyglobby: 0.2.14
     optionalDependencies:
+      '@types/node': 24.1.0
       fsevents: 2.3.3
