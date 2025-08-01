@@ -8,6 +8,7 @@ const aspect = window.devicePixelRatio
 const scene = new THREE.Scene()
 
 const camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000)
+// const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
 camera.position.set(0, 2, 4)
 
 const renderer = new THREE.WebGLRenderer()
@@ -35,4 +36,8 @@ function animate(cb?: Function) {
   controls.update()
 }
 
-export { scene, camera, animate, render }
+export { scene, camera, animate, render, randomHexColor as randomColor }
+
+function randomHexColor() {
+  return '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')
+}
