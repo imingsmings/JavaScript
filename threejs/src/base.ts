@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three-stdlib'
+import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 const sizes = {
   width: window.innerWidth,
@@ -16,7 +17,7 @@ const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, 
 // const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
 camera.position.set(0, 2, 4)
 
-const renderer = new THREE.WebGLRenderer()
+const renderer = new THREE.WebGLRenderer({})
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 document.body.append(renderer.domElement)
@@ -29,17 +30,24 @@ controls.enableDamping = true
 
 controls.addEventListener('change', render)
 
+const stats = new Stats()
+stats.showPanel(0)
+document.body.appendChild(stats.dom)
+
 function render() {
   renderer.render(scene, camera)
 }
 
 function animate(cb?: Function) {
-  requestAnimationFrame(() => {
-    cb && cb()
-    animate(cb)
-  })
+  stats.begin()
   render()
   controls.update()
+  stats.end()
+
+  requestAnimationFrame((time) => {
+    cb && cb(time)
+    animate(cb)
+  })
 }
 
 window.addEventListener('resize', resize, false)
