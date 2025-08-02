@@ -80,7 +80,7 @@ function dbclick(e: MouseEvent) {
   }
 }
 
-export { scene, camera, animate, render, randomHexColor as randomColor }
+export { scene, camera, animate, render, renderer, randomHexColor as randomColor }
 
 function randomHexColor() {
   return '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')
