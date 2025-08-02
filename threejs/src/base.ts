@@ -69,6 +69,8 @@ window.addEventListener('dblclick', dbclick, false)
 function dbclick(e: MouseEvent) {
   const target = e.target as HTMLElement
 
+  if (!(target instanceof HTMLCanvasElement)) return
+
   if (!document.fullscreenElement) {
     if (target.requestFullscreen) {
       target.requestFullscreen()
