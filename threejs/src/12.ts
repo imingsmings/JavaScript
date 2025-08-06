@@ -39,6 +39,8 @@ export default function () {
   scene.add(spotLight)
   const spotLightHelper = new THREE.SpotLightHelper(spotLight)
   scene.add(spotLightHelper)
+  spotLight.target.position.x = 0.2
+  scene.add(spotLight.target)
 
   const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 64, 64), material)
   sphere.position.x = -1
