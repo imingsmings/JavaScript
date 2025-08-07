@@ -22,8 +22,8 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 document.body.append(renderer.domElement)
 
-const axes = new THREE.AxesHelper(3)
-scene.add(axes)
+// const axes = new THREE.AxesHelper(3)
+// scene.add(axes)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
