@@ -6,16 +6,17 @@ const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
   aspect: window.innerWidth / window.innerHeight,
-  fov: 45,
+  fov: 75,
   near: 0.1,
-  far: 1000
+  far: 100
 }
 
 const scene = new THREE.Scene()
 
 const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, sizes.far)
 // const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
-camera.position.set(0, 2, 4)
+// camera.position.set(0, 2, 4)
+camera.position.set(4, 2, 5)
 
 const renderer = new THREE.WebGLRenderer({})
 renderer.setSize(sizes.width, sizes.height)
