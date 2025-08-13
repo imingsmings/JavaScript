@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three-stdlib'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 
-const sizes = {
+export const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
   aspect: window.innerWidth / window.innerHeight,
@@ -16,20 +16,24 @@ const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, sizes.far)
 // const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
 // camera.position.set(0, 2, 4)
-camera.position.set(4, 2, 5)
+// camera.position.set(4, 2, 5)
+camera.position.set(0, 0, 6)
 
-const renderer = new THREE.WebGLRenderer({})
+const renderer = new THREE.WebGLRenderer({
+  alpha: true
+})
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 document.body.append(renderer.domElement)
+renderer.domElement.classList.add('webgl')
 
 // const axes = new THREE.AxesHelper(3)
 // scene.add(axes)
 
-const controls = new OrbitControls(camera, renderer.domElement)
-controls.enableDamping = true
+// const controls = new OrbitControls(camera, renderer.domElement)
+// controls.enableDamping = true
 
-controls.addEventListener('change', render)
+// controls.addEventListener('change', render)
 
 const stats = new Stats()
 stats.showPanel(0)
@@ -42,7 +46,7 @@ function render() {
 function animate(cb?: Function) {
   stats.begin()
   render()
-  controls.update()
+  // controls.update()
   stats.end()
 
   requestAnimationFrame((time) => {

@@ -13,6 +13,9 @@
 // import main from './src/13'
 // import main from './src/haunted-house'
 // import main from './src/14'
-import main from './src/galaxy'
+// import main from './src/galaxy'
+import main from './src/15'
+
+import './index.css'
 
 main()
