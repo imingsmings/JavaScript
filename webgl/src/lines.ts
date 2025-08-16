@@ -1,4 +1,4 @@
-import { getWebGL2Context, compileShader, createProgram, clearDrawing } from './uitls'
+import { getWebGL2Context, compileShader, createProgram, clearDrawing, clientToNDC } from './uitls'
 
 export default function () {
   const { canvas, gl } = getWebGL2Context()
@@ -39,10 +39,16 @@ export default function () {
   gl.enableVertexAttribArray(linePointLoc)
   gl.vertexAttribPointer(linePointLoc, 2, gl.FLOAT, false, 0, 0)
 
-  clearDrawing(gl)
-  gl.bindVertexArray(vao)
-  // gl.drawArrays(gl.LINES, 0, points.length / 2)
-  // gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2)
-  gl.uniform3f(lineColor, Math.random(), Math.random(), Math.random())
-  gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2)
+  canvas.addEventListener('click', draw, false)
+
+  draw()
+
+  function draw() {
+    clearDrawing(gl)
+    gl.bindVertexArray(vao)
+    // gl.drawArrays(gl.LINES, 0, points.length / 2)
+    // gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2)
+    gl.uniform3f(lineColor, Math.random(), Math.random(), Math.random())
+    gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2)
+  }
 }
