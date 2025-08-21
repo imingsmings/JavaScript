@@ -4,21 +4,20 @@ export default async function () {
   const image = await loadTexture('/door.jpg')
   if (!image) return
 
+  const roughness = await loadTexture('/roughness.jpg')
+  if (!roughness) return
+
   const { canvas, gl } = getWebGL2Context()
 
   const vertexShaderSource = `#version 300 es
-    uniform vec2 u_resolution;
     in vec2 a_position;
     in vec2 a_texCoord;
     out vec2 v_texCoord;
 
     void main() {
-      vec2 zeroToOne = a_position / u_resolution;
-      vec2 zeroToTwo = zeroToOne * 2.0;
-      vec2 clipSpace = zeroToTwo - 1.0;
-
-      gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1.0);
+      gl_Position = vec4(a_position, 0, 1.0);
       v_texCoord = a_texCoord;
+      // v_texCoord = vec2(4.0, 2.0) * a_texCoord;
     }
   `
 
@@ -42,30 +41,58 @@ export default async function () {
 
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord')
-  const resolutionLocation = gl.getUniformLocation(program, 'u_resolution')
   const imageLocation = gl.getUniformLocation(program, 'u_image')
 
   const vao = gl.createVertexArray()
   gl.bindVertexArray(vao)
 
-  const points = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]
+  const positions = new Float32Array([
+    -1,
+    1, // TL
+    -1,
+    -1, // BL
+    1,
+    -1, // BR
+    1,
+    -1, // BR
+    -1,
+    1, // TL
+    1,
+    1 // TR
+  ])
+  const uvs = new Float32Array([
+    0,
+    1, // TL
+    0,
+    0, // BL
+    1,
+    0, // BR
+    1,
+    0, // BR
+    0,
+    1, // TL
+    1,
+    1 // TR
+  ])
 
   const positionBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW)
   gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
   gl.enableVertexAttribArray(positionLocation)
 
   const texCoordBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer)
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(points), gl.STATIC_DRAW)
+  gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW)
   gl.enableVertexAttribArray(texCoordLocation)
   gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
 
   const texture = gl.createTexture()
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
   gl.activeTexture(gl.TEXTURE0)
   gl.bindTexture(gl.TEXTURE_2D, texture)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
@@ -74,13 +101,8 @@ export default async function () {
 
   gl.bindVertexArray(vao)
 
-  gl.uniform2f(resolutionLocation, canvas.width, canvas.height)
   gl.uniform1i(imageLocation, 0)
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-  setRectangle(gl, 0, 0, image.width, image.height)
-
-  gl.drawArrays(gl.TRIANGLES, 0, 6)
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2)
 }
 
 function loadTexture(url: string): Promise<HTMLImageElement | null> {
@@ -94,15 +116,4 @@ function loadTexture(url: string): Promise<HTMLImageElement | null> {
       resolve(null)
     }
   })
-}
-
-function setRectangle(gl: WebGL2RenderingContext, x: number, y: number, width: number, height: number) {
-  var x1 = x
-  var x2 = x + width
-  var y1 = y
-  var y2 = y + height
-
-  const points = new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2])
-
-  gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW)
 }
