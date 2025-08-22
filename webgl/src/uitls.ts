@@ -79,3 +79,31 @@ export function clearDrawing(gl: WebGL2RenderingContext) {
   gl.clearColor(0, 0, 0, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
+
+export function create2DTexture(gl: WebGL2RenderingContext, image: HTMLImageElement, textureUnit: number) {
+  const texture = gl.createTexture()
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
+  gl.activeTexture(textureUnit)
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+
+  return texture
+}
+
+export function loadImage(url: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const image = new Image()
+    image.setAttribute('src', url)
+    image.onload = function () {
+      resolve(image)
+    }
+    image.onerror = function () {
+      resolve(null)
+    }
+  })
+}

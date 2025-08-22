@@ -1,10 +1,10 @@
-import { getWebGL2Context, compileShader, createProgram, clearDrawing, clientToNDC } from './uitls'
+import { getWebGL2Context, compileShader, createProgram, clearDrawing, loadImage, create2DTexture } from './uitls'
 
 export default async function () {
-  const image = await loadTexture('/door.jpg')
+  const image = await loadImage('/door.jpg')
   if (!image) return
 
-  const roughness = await loadTexture('/roughness.jpg')
+  const roughness = await loadImage('/roughness.jpg')
   if (!roughness) return
 
   const { canvas, gl } = getWebGL2Context()
@@ -25,13 +25,20 @@ export default async function () {
     precision highp float;
 
     uniform sampler2D u_image;
+    uniform sampler2D u_rough;
 
     in vec2 v_texCoord;
     out vec4 outColor;
 
     void main() {
-      outColor = texture(u_image, v_texCoord);
+      // outColor = texture(u_image, v_texCoord);
       // outColor = vec4(1.0, 0, 0, 1.0);
+
+      vec3 base = texture(u_image, v_texCoord).rgb;
+      float rough = texture(u_rough, v_texCoord).g;
+
+      vec3 overlay = mix(base, vec3(rough), 0.1);
+      outColor = vec4(overlay, 1.0);
     }
   `
 
@@ -42,6 +49,7 @@ export default async function () {
   const positionLocation = gl.getAttribLocation(program, 'a_position')
   const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord')
   const imageLocation = gl.getUniformLocation(program, 'u_image')
+  const roughLocation = gl.getUniformLocation(program, 'u_rough')
 
   const vao = gl.createVertexArray()
   gl.bindVertexArray(vao)
@@ -87,33 +95,15 @@ export default async function () {
   gl.enableVertexAttribArray(texCoordLocation)
   gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
 
-  const texture = gl.createTexture()
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+  create2DTexture(gl, image, gl.TEXTURE0)
+  create2DTexture(gl, roughness, gl.TEXTURE1)
 
   clearDrawing(gl)
 
   gl.bindVertexArray(vao)
 
   gl.uniform1i(imageLocation, 0)
-  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2)
-}
+  gl.uniform1i(roughLocation, 1)
 
-function loadTexture(url: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const image = new Image()
-    image.setAttribute('src', url)
-    image.onload = function () {
-      resolve(image)
-    }
-    image.onerror = function () {
-      resolve(null)
-    }
-  })
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2)
 }
