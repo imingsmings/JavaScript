@@ -12,5 +12,8 @@
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "vite": "^7.1.2"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.4"
   }
 }
