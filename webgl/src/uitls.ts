@@ -20,8 +20,8 @@ export function getWebGL2Context(selector: string = '#webgl2'): WebGL2Context {
 }
 
 export function setDrawingSize(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext): void {
-  const width = window.innerWidth
-  const height = window.innerHeight
+  const width = 640
+  const height = 640
 
   canvas.width = width
   canvas.height = height
