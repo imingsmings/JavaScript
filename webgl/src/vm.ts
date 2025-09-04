@@ -2,7 +2,7 @@ import { mat4 } from 'gl-matrix'
 import { clearDrawing, compileShader, createProgram, getWebGL2Context } from './uitls'
 
 export default function () {
-  const { gl } = getWebGL2Context()
+  const { gl, canvas } = getWebGL2Context()
 
   const vertexShaderSource = `#version 300 es
     uniform mat4 u_formMatrix;
@@ -63,7 +63,7 @@ export default function () {
   gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 8 * BYTES, 4 * BYTES)
 
   let viewMatrix = mat4.identity(mat4.create())
-  viewMatrix = mat4.lookAt(viewMatrix, [0, -0.2, 0.5], [0, 0, 0], [0, 1, 0])
+  viewMatrix = mat4.lookAt(viewMatrix, [0, 2, 2], [0, 0, 0], [0, 1, 0])
 
   let modelMatrix = mat4.identity(mat4.create())
   let angle = (Math.PI / 180) * 30
@@ -72,7 +72,13 @@ export default function () {
   let modelView = mat4.identity(mat4.create())
   mat4.multiply(modelView, viewMatrix, modelMatrix)
 
-  gl.uniformMatrix4fv(uniformMatrix, false, viewMatrix)
+  let projMatrix = mat4.identity(mat4.create())
+  mat4.perspective(projMatrix, 45 * (Math.PI / 180), canvas.width / canvas.height, 0.1, 1000)
+
+  let mvpMatrix = mat4.identity(mat4.create())
+  mat4.multiply(mvpMatrix, projMatrix, modelView)
+
+  gl.uniformMatrix4fv(uniformMatrix, false, mvpMatrix)
 
   let deg = 0
   function draw() {
@@ -84,7 +90,10 @@ export default function () {
     let modelView = mat4.identity(mat4.create())
     mat4.multiply(modelView, viewMatrix, modelMatrix)
 
-    gl.uniformMatrix4fv(uniformMatrix, false, modelView)
+    let mvpMatrix = mat4.identity(mat4.create())
+    mat4.multiply(mvpMatrix, projMatrix, modelView)
+
+    gl.uniformMatrix4fv(uniformMatrix, false, mvpMatrix)
 
     clearDrawing(gl)
     gl.enable(gl.DEPTH_TEST)
