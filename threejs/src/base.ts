@@ -17,7 +17,7 @@ const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, 
 // const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
 // camera.position.set(0, 2, 4)
 // camera.position.set(4, 2, 5)
-camera.position.set(0, 0, 6)
+camera.position.set(0, 2, 6)
 
 const renderer = new THREE.WebGLRenderer({
   alpha: true
@@ -30,10 +30,10 @@ renderer.domElement.classList.add('webgl')
 // const axes = new THREE.AxesHelper(3)
 // scene.add(axes)
 
-// const controls = new OrbitControls(camera, renderer.domElement)
-// controls.enableDamping = true
+const controls = new OrbitControls(camera, renderer.domElement)
+controls.enableDamping = true
 
-// controls.addEventListener('change', render)
+controls.addEventListener('change', render)
 
 const stats = new Stats()
 stats.showPanel(0)
@@ -46,7 +46,7 @@ function render() {
 function animate(cb?: Function) {
   stats.begin()
   render()
-  // controls.update()
+  controls.update()
   stats.end()
 
   requestAnimationFrame((time) => {
