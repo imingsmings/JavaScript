@@ -15,7 +15,8 @@
 // import main from './src/14'
 // import main from './src/galaxy'
 // import main from './src/15'
-import main from './src/16-physics'
+// import main from './src/16-physics'
+import main from './src/17-import-models'
 
 import './index.css'
 
