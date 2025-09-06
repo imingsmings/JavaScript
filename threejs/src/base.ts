@@ -17,7 +17,7 @@ const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, 
 // const camera = new THREE.OrthographicCamera(-1, 1, 1, -1)
 // camera.position.set(0, 2, 4)
 // camera.position.set(4, 2, 5)
-camera.position.set(0, 2, 6)
+camera.position.set(0, 0, 6)
 
 const renderer = new THREE.WebGLRenderer({
   alpha: true
