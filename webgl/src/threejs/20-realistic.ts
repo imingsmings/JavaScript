@@ -15,7 +15,7 @@ export default function () {
   scene.add(directionalLight)
 
   const gltfLoader = new GLTFLoader()
-  const url = '/models/FlightHelmet/glTF/FlightHelmet.gltf'
+  const url = '/threejs/models/FlightHelmet/glTF/FlightHelmet.gltf'
   gltfLoader.load(url, (gltf: GLTF) => {
     gltf.scene.scale.set(8, 8, 8)
     gltf.scene.position.set(0, -3, 0)
@@ -27,12 +27,12 @@ export default function () {
 
   const environmentLoader = new THREE.CubeTextureLoader()
   const environment = environmentLoader.load([
-    '/environmentMaps/0/px.jpg',
-    '/environmentMaps/0/nx.jpg',
-    '/environmentMaps/0/py.jpg',
-    '/environmentMaps/0/ny.jpg',
-    '/environmentMaps/0/pz.jpg',
-    '/environmentMaps/0/nz.jpg'
+    '/threejs/environmentMaps/0/px.jpg',
+    '/threejs/environmentMaps/0/nx.jpg',
+    '/threejs/environmentMaps/0/py.jpg',
+    '/threejs/environmentMaps/0/ny.jpg',
+    '/threejs/environmentMaps/0/pz.jpg',
+    '/threejs/environmentMaps/0/nz.jpg'
   ])
   scene.background = environment
   scene.environment = environment
