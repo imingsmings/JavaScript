@@ -1,7 +1,16 @@
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+
+uniform vec2 uFreqency;
+uniform float uTime;
+
 in vec3 position;
+in float aPosition;
+in vec2 uv;
+
+out float vColor;
+out vec2 vUV;
 
 float loremIpsum() {
   float a = 1.0;
@@ -11,22 +20,22 @@ float loremIpsum() {
  }
 
 void main() {
-  // float a = 1.0;
-  // float b = 2.0;
-  // float c = a / b;
+  // gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 
-  // int ia = 1;
-  // int ib = int(b);
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-  // bool foo = true;
+  // modelPosition.y += 1.0;
+  modelPosition.z += sin(modelPosition.x * uFreqency.x - uTime) * 0.2;
+  modelPosition.z += sin(modelPosition.y * uFreqency.y- uTime) * 0.2;
+  // modelPosition.z += aPosition;
 
-  // vec2 foo = vec2(1.0, 2.0);
+  vec4 viewPosition = viewMatrix * modelPosition;
 
-  // vec4 foo = vec4(1.0, 2.0, 3.0, 4.0);
-  // float bar = foo.w;
+  vec4 projectionPosition = projectionMatrix * viewPosition;
 
-  float result = loremIpsum();
+  gl_Position = projectionPosition;
 
-  gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+  // vColor = aPosition;
+  vUV = uv;
  }
 
