@@ -20,12 +20,13 @@ const camera = new THREE.PerspectiveCamera(sizes.fov, sizes.aspect, sizes.near, 
 camera.position.set(0, 2, 6)
 
 const renderer = new THREE.WebGLRenderer({
-  alpha: true
+  alpha: true,
+  canvas: document.getElementById('webgl2') as HTMLCanvasElement
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-document.body.append(renderer.domElement)
-renderer.domElement.classList.add('webgl')
+// document.body.append(renderer.domElement)
+// renderer.domElement.classList.add('webgl')
 
 // const axes = new THREE.AxesHelper(3)
 // scene.add(axes)

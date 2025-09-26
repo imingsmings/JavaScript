@@ -7,3 +7,7 @@ html,
 body {
   overflow: hidden;
 }
+
+body {
+  background-color: rgba(0, 0, 0, 0.9);
+}
