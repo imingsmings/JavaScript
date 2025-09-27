@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { animate, scene } from '../threejs/base'
+import { animate, scene } from '../../threejs/base'
 import vertexSource from './vertex.glsl'
 import fragmentSource from './fragment.glsl'
 
