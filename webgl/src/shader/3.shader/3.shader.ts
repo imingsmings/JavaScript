@@ -14,10 +14,10 @@ export default function () {
   const gui = new GUI()
   const debugObject: DebugObject = {}
 
-  debugObject.debugColor = '#0000ff'
-  debugObject.surfaceColor = '#8888ff'
+  debugObject.debugColor = '#1f6fd1'
+  debugObject.surfaceColor = '#9bd8ff'
 
-  const geometry = new THREE.PlaneGeometry(4, 4, 128, 128)
+  const geometry = new THREE.PlaneGeometry(6, 6, 128, 128)
 
   const material = new THREE.RawShaderMaterial({
     transparent: true,
@@ -42,6 +42,12 @@ export default function () {
       },
       uSurfaceColor: {
         value: new THREE.Color(debugObject.surfaceColor)
+      },
+      uColorOffset: {
+        value: 0.08
+      },
+      uColorMultipler: {
+        value: 5
       }
     }
   })
@@ -62,6 +68,8 @@ export default function () {
     .onChange((color: THREE.Color) => {
       material.uniforms.uSurfaceColor.value.set(color)
     })
+  gui.add(material.uniforms.uColorOffset, 'value').name('Color Offset').min(0).max(1).step(0.001)
+  gui.add(material.uniforms.uColorMultipler, 'value').name('Color Multipler').min(0).max(10).step(0.001)
 
   const mesh = new THREE.Mesh(geometry, material)
   mesh.rotation.set(-Math.PI / 3, 0, 0)
