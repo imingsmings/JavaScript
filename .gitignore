@@ -6,3 +6,6 @@ build
 coverage
 *.mp4
 .vscode
+*.hdr
+*.exr
+castle.jpg

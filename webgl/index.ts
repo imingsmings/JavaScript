@@ -6,8 +6,8 @@
 // import main from './src/vm'
 // import main from './src/projection'
 
-// import main from './src/threejs'
-import main from './src/shader'
+import main from './src/threejs'
+// import main from './src/shader'
 
 import './index.css'
 
