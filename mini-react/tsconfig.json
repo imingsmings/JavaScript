@@ -7,8 +7,11 @@
     "strict": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
+    "paths": {
+      "shared": ["./packages/shared"]
+    }
   },
   "include": [
-    "./packages/*"
+    "./packages/**/*"
   ]
 }
