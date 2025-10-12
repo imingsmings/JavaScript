@@ -1,0 +1,15 @@
+{
+  "name": "reconciler",
+  "version": "1.0.0",
+  "description": "",
+  "module": "index.ts",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "workspace:*"
+  },
+  "packageManager": "pnpm@10.18.2"
+}

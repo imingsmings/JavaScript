@@ -1,4 +1,4 @@
-import { jsx, $$typeof } from '../jsx-runtime'
+import { jsx, jsxDEV, $$typeof } from '../src/jsx'
 
 describe('jsx runtime testing', () => {
   test('Normal element', () => {
@@ -32,12 +32,12 @@ describe('jsx runtime testing', () => {
 
   test('Ref', () => {
     const ref = {}
-    const element = jsx('div', { ref })
+    const element = jsxDEV('div', { ref })
     expect(element.ref).toBe(ref)
   })
 
   test('Without ref', () => {
-    const element = jsx('div', {})
+    const element = jsxDEV('div', {})
     expect(element.ref).toBeNull()
   })
 })

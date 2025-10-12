@@ -7,6 +7,11 @@
   "dependencies": {
     "shared": "workspace:*"
   },
+  "exports": {
+    ".": "./index.ts",
+    "./jsx-dev-runtime": "./jsx-dev-runtime.ts",
+    "./jsx-runtime": "./jsx-runtime.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
