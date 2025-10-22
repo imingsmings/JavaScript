@@ -1,10 +1,8 @@
-import { ReactElementType } from 'shared'
-
-export const $$typeof = typeof Symbol === 'function' && Symbol.for ? Symbol.for('React.element') : 'React.element'
+import { ReactElementType, REACT_ELEMENT_TYPE } from 'shared'
 
 function ReactElement(type: any, props: any, key: any, ref: any): ReactElementType {
   return {
-    $$typeof,
+    $$typeof: REACT_ELEMENT_TYPE,
     type,
     props,
     key,

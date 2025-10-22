@@ -1,5 +1,5 @@
 import { HostComponent } from '../src/ReactInternalTypes'
-import { createFiber, createFiberFromElement, createFiberFromTypeAndProps } from '../src/fiber'
+import { createFiber, createFiberFromElement, createFiberFromTypeAndProps } from '../src/Fiber'
 import { ReactElementType } from 'shared'
 import { jsx } from 'react/jsx-runtime'
 
@@ -17,7 +17,8 @@ describe('Fiber testing', () => {
       return: null,
       child: null,
       sibling: null,
-      ref: null
+      ref: null,
+      pendingProps: null
     })
   })
 
@@ -37,7 +38,7 @@ describe('Fiber testing', () => {
   })
 
   test('createFiberFromTypeAndProps', () => {
-    const fiber = createFiberFromTypeAndProps('div', 'testkey')
+    const fiber = createFiberFromTypeAndProps('div', {}, 'testkey')
     expect(fiber.tag).toBe(HostComponent)
     expect(fiber.type).toBe('div')
     expect(fiber.key).toBe('testkey')

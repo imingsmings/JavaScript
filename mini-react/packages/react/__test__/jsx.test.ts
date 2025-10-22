@@ -1,10 +1,11 @@
-import { jsx, jsxDEV, $$typeof } from '../src/jsx'
+import { jsx, jsxDEV } from '../src/jsx'
+import { REACT_ELEMENT_TYPE } from 'shared'
 
 describe('jsx runtime testing', () => {
   test('Normal element', () => {
     const element = jsx('div', { class: 'container', id: 'root' }, 'testkey')
     expect(element).toEqual({
-      $$typeof,
+      $$typeof: REACT_ELEMENT_TYPE,
       type: 'div',
       props: {
         class: 'container',
@@ -17,7 +18,7 @@ describe('jsx runtime testing', () => {
 
   test('Without key', () => {
     const element = jsx('div', { children: 'hello world' })
-    expect(element.$$typeof).toBe($$typeof)
+    expect(element.$$typeof).toBe(REACT_ELEMENT_TYPE)
     expect(element.type).toBe('div')
     expect(element.key).toBeNull()
     expect(element.props).toEqual({ children: 'hello world' })

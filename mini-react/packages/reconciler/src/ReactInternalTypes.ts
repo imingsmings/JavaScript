@@ -16,4 +16,5 @@ export type FiberNode = {
   child: FiberNode | null
   sibling: FiberNode | null
   ref: any
+  pendingProps: any
 }

@@ -1,1 +1,2 @@
-export * from './ReactElementType'
+export * from './src/ReactElementType'
+export * from './src/ReactSymbols'
