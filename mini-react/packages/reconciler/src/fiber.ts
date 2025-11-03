@@ -1,5 +1,5 @@
 import { type ReactElementType } from 'shared'
-import { HostComponent, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
+import { HostComponent, HostRoot, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
 
 export function createFiber(tag: WorkTag, key: string | null): FiberNode {
   return {
@@ -34,5 +34,10 @@ export function createFiberFromElement(element: ReactElementType): FiberNode {
 export function createFiberFromText(text: string): FiberNode {
   const fiber = createFiber(HostText, null)
   fiber.pendingProps = text
+  return fiber
+}
+
+export function createHostRootFiber(): FiberNode {
+  const fiber = createFiber(HostRoot, null)
   return fiber
 }

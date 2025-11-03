@@ -42,7 +42,8 @@ export const MULTIPLE_ELEMENTS = {
         props: {
           id: 'title2',
           children: [
-            '123',
+            123,
+            // 456,
             {
               $$typeof: REACT_ELEMENT_TYPE,
               type: 'span',

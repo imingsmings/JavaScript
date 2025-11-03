@@ -13,11 +13,6 @@ export function reconcileChildFibers(fiber: FiberNode, children: any) {
     return reconcileSingleElement(fiber, children)
   }
 
-  // text node
-  if (typeof children === 'string' || typeof children === 'number') {
-    return null
-  }
-
   return null
 }
 
@@ -33,8 +28,7 @@ function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberN
 
   for (let i = 0; i < children.length; i++) {
     const element = children[i]
-    const create = typeof element === 'string' ? createFiberFromText : createFiberFromElement
-    const newFiber = create(element)
+    const newFiber = typeof element === 'string' || typeof element === 'number' ? createFiberFromText(element + '') : createFiberFromElement(element)
 
     newFiber.return = returnFiber
 

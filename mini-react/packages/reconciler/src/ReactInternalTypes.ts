@@ -18,3 +18,7 @@ export type FiberNode = {
   ref: any
   pendingProps: any
 }
+
+export type FiberRootNode = {
+  containerInfo: HTMLElement
+}
