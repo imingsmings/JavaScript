@@ -1,5 +1,5 @@
 import { type ReactElementType } from 'shared'
-import { HostComponent, HostRoot, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
+import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
 
 export function createFiber(tag: WorkTag, key: string | null): FiberNode {
   return {
@@ -17,7 +17,7 @@ export function createFiber(tag: WorkTag, key: string | null): FiberNode {
 }
 
 export function createFiberFromTypeAndProps(type: any, props: any, key: string | null): FiberNode {
-  let fiberTag: WorkTag = HostComponent
+  const fiberTag: WorkTag = typeof type === 'function' ? FunctionComponent : HostComponent
   const fiber = createFiber(fiberTag, key)
   fiber.elementType = type
   fiber.type = type

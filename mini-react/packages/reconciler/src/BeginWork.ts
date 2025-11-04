@@ -1,17 +1,24 @@
-import { FiberNode, HostText } from './ReactInternalTypes'
+import { FiberNode, FunctionComponent, HostComponent, HostText } from './ReactInternalTypes'
 import { reconcileChildFibers } from './ChildFiber'
 
 export function beginWork(fiber: FiberNode): FiberNode | null {
-  if (fiber.tag === HostText) {
+  const childrenProps = fiber.pendingProps.children
+
+  if (typeof childrenProps === 'string' || typeof childrenProps === 'number') {
     return null
   }
 
-  const children = fiber.pendingProps.children
-
-  if (typeof children === 'string' || typeof children === 'number') {
-    return null
+  switch (fiber.tag) {
+    case HostText:
+      return null
+    case FunctionComponent:
+      const children = fiber.type()
+      fiber.child = reconcileChildFibers(fiber, children)
+      return fiber.child
+    case HostComponent:
+      fiber.child = reconcileChildFibers(fiber, childrenProps)
+      return fiber.child
+    default:
+      return null
   }
-
-  fiber.child = reconcileChildFibers(fiber, children)
-  return fiber.child
 }

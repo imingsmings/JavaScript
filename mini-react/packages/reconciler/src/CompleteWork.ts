@@ -1,21 +1,29 @@
 import { appendChild, createInstance, createTextInstance, setInitialProps, type Instance } from './FiberConfigDOM'
-import { HostText, type FiberNode } from './ReactInternalTypes'
+import { FunctionComponent, HostComponent, HostText, type FiberNode } from './ReactInternalTypes'
 
 function appendAllChildren(parent: Instance, child: FiberNode | null) {
   let node: FiberNode | null = child
   while (node) {
-    appendChild(parent, node.stateNode)
+    const childStateNode = node.tag === FunctionComponent ? node.child!.stateNode : node.stateNode
+    appendChild(parent, childStateNode)
     node = node.sibling
   }
 }
 
 export function completeWork(fiber: FiberNode) {
-  if (fiber.tag === HostText) {
-    fiber.stateNode = createTextInstance(fiber.pendingProps)
-  } else {
-    const instance = createInstance(fiber.type)
-    appendAllChildren(instance, fiber.child)
-    setInitialProps(instance, fiber.pendingProps)
-    fiber.stateNode = instance
+  switch (fiber.tag) {
+    case HostText:
+      fiber.stateNode = createTextInstance(fiber.pendingProps + '')
+      break
+    case FunctionComponent:
+      break
+    case HostComponent:
+      const instance = createInstance(fiber.type)
+      appendAllChildren(instance, fiber.child)
+      setInitialProps(instance, fiber.pendingProps)
+      fiber.stateNode = instance
+      break
+    default:
+      break
   }
 }
