@@ -1,16 +1,16 @@
 {
-  "name": "react",
+  "name": "react-dom",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "module": "index.ts",
+  "main": "client.js",
+  "scripts": {
+  },
   "dependencies": {
     "shared": "workspace:*"
   },
-  "exports": {
+   "exports": {
     ".": "./index.ts",
-    "./jsx-dev-runtime": "./jsx-dev-runtime.ts",
-    "./jsx-runtime": "./jsx-runtime.ts"
+    "./client": "./client.ts"
   },
   "keywords": [],
   "author": "",

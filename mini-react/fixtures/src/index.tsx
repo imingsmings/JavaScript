@@ -1,3 +1,5 @@
+import { createRoot } from 'react-dom/client'
+
 const element = (
   <div id='container'>
     <h1>1234</h1>
@@ -6,4 +8,5 @@ const element = (
     </h2>
   </div>
 )
-console.log(element)
+
+createRoot(document.getElementById('root')!).render(element)

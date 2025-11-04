@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "workspace:*"
+    "react": "workspace:*",
+    "shared": "workspace:*"
   },
-  "packageManager": "pnpm@10.18.2"
+  "packageManager": "pnpm@10.20.0"
 }

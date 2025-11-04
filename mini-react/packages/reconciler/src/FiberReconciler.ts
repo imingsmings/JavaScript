@@ -1,10 +1,9 @@
-import { createFiberRoot } from '../src/FiberRoot'
-import { createHostRootFiber } from '../src/Fiber'
 import { ReactElementType } from 'shared'
-import { FiberNode } from '../src/ReactInternalTypes'
-import { workLoop } from '../src/WorkLoop'
-import { appendChild } from '../src/FiberConfigDOM'
-import { createFiberFromElement } from '../src/Fiber'
+import { createFiberRoot } from './FiberRoot'
+import { createHostRootFiber, createFiberFromElement } from './Fiber'
+import { FiberNode } from './ReactInternalTypes'
+import { workLoop } from './WorkLoop'
+import { appendChild } from './FiberConfigDOM'
 
 export function createContainer(containerInfo: HTMLElement) {
   const root = createFiberRoot(containerInfo)
