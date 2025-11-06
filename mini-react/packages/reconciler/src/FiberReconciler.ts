@@ -17,5 +17,6 @@ export function updateContainer(element: ReactElementType, root: FiberNode) {
   workLoop(containerFiber)
   root.child = containerFiber
   containerFiber.return = root
+
   appendChild(root.stateNode.containerInfo, root.child?.stateNode)
 }

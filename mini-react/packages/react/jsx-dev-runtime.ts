@@ -1,1 +1,3 @@
-export { jsxDEV } from './src/jsx'
+import { jsxDEV } from './src/jsx'
+
+export { jsxDEV }

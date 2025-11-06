@@ -1,27 +1,7 @@
 import { beginWork } from './BeginWork'
 import { completeWork } from './CompleteWork'
+import { appendChild, removeChild } from './FiberConfigDOM'
 import { type FiberNode } from './ReactInternalTypes'
-
-// export function workLoop(fiber: FiberNode) {
-//   let child = beginWork(fiber)
-//   if (child !== null) {
-//     workLoop(child)
-//   }
-//   completeWork(fiber)
-//   if (fiber.sibling !== null) {
-//     workLoop(fiber.sibling)
-//   }
-// }
-
-/**
-<div>
-  <h1>123</h1>
-  <p>
-    text
-    <span>456</span>
-  </p>
-</div>
- */
 
 let workInProgress: FiberNode | null = null
 
@@ -30,6 +10,13 @@ export function workLoop(fiber: FiberNode) {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress)
   }
+}
+
+export function updateOnFiber(fiber: FiberNode) {
+  const hostRootFiber = getRootForUpdatedFiber(fiber)
+  removeChild(hostRootFiber.stateNode.containerInfo, hostRootFiber.child?.stateNode)
+  workLoop(fiber)
+  appendChild(hostRootFiber.stateNode.containerInfo, hostRootFiber.child?.stateNode)
 }
 
 function performUnitOfWork(fiber: FiberNode) {
@@ -55,4 +42,12 @@ function completeUnifOfWork(fiber: FiberNode) {
     completedFiber = completedFiber!.return
     workInProgress = completedFiber
   } while (completedFiber !== null)
+}
+
+function getRootForUpdatedFiber(fiber: FiberNode) {
+  let node: FiberNode = fiber
+  while (node.return) {
+    node = node.return
+  }
+  return node
 }

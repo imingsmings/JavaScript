@@ -18,7 +18,8 @@ describe('Fiber testing', () => {
       child: null,
       sibling: null,
       ref: null,
-      pendingProps: null
+      pendingProps: null,
+      memoizedState: null
     })
   })
 

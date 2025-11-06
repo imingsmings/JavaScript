@@ -1,5 +1,6 @@
 import { FiberNode, FunctionComponent, HostComponent, HostText } from './ReactInternalTypes'
 import { reconcileChildFibers } from './ChildFiber'
+import { renderWithHooks } from './FiberHook'
 
 export function beginWork(fiber: FiberNode): FiberNode | null {
   const childrenProps = fiber.pendingProps.children
@@ -12,7 +13,7 @@ export function beginWork(fiber: FiberNode): FiberNode | null {
     case HostText:
       return null
     case FunctionComponent:
-      const children = fiber.type()
+      const children = renderWithHooks(fiber, fiber.type)
       fiber.child = reconcileChildFibers(fiber, children)
       return fiber.child
     case HostComponent:

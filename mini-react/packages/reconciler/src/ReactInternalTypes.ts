@@ -17,6 +17,7 @@ export type FiberNode = {
   sibling: FiberNode | null
   ref: any
   pendingProps: any
+  memoizedState: any
 }
 
 export type FiberRootNode = {

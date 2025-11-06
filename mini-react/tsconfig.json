@@ -6,6 +6,8 @@
     "moduleResolution": "bundler",
     "strict": true,
     "jsx": "react-jsx",
+    // "jsxImportSource": "packages/react",
+    // "baseUrl": "./",
     "skipLibCheck": true,
     "paths": {
       "shared": ["./packages/shared"],
@@ -13,6 +15,7 @@
   },
   "include": [
     "./packages/**/*",
-    "./fixtures"
+    "./fixtures",
+    "./global.d.ts"
   ]
 }

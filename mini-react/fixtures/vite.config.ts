@@ -9,10 +9,12 @@ export default defineConfig({
       {
         find: 'react',
         replacement: path.resolve(import.meta.dirname, '../packages/react')
+        // replacement: path.resolve(import.meta.dirname, '../dist/react')
       },
       {
         find: 'react-dom',
         replacement: path.resolve(import.meta.dirname, '../packages/react-dom')
+        // replacement: path.resolve(import.meta.dirname, '../dist/react-dom')
       }
     ]
   }

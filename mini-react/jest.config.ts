@@ -4,7 +4,10 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: ['<rootDir>'],
-  testMatch: ['**/?(*.)test.ts', '**/?(*.)spec.ts'],
+  testMatch: ['**/?(*.)test.{ts,tsx}', '**/?(*.)spec.{ts,tsx}'],
+  moduleNameMapper: {
+    '^packages/react/(.*)$': '<rootDir>/packages/react/$1'
+  },
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },

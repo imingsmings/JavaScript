@@ -13,14 +13,18 @@ export function appendChild(parent: Instance, child: Instance) {
   parent.appendChild(child)
 }
 
+export function removeChild(parent: Instance, child: Instance) {
+  parent.removeChild(child)
+}
+
 export function setInitialProps(dom: Instance, props: any) {
   for (const prop in props) {
     if (!Object.hasOwn(props, prop)) {
       continue
     }
     if (prop === 'children') {
-      if (typeof props.children === 'string') {
-        dom.textContent = props.children
+      if (typeof props.children === 'string' || typeof props.children === 'number') {
+        dom.textContent = props.children + ''
       }
       continue
     }
