@@ -67,7 +67,5 @@ export function renderWithHooks(workInProgress: FiberNode, Component: Function) 
   const children = Component()
   workInProgressHook = null
 
-  console.log(ReactSharedInternals)
-
   return children
 }

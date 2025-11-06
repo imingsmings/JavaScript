@@ -1,6 +1,6 @@
 import { beginWork } from './BeginWork'
 import { completeWork } from './CompleteWork'
-import { appendChild, removeChild } from './FiberConfigDOM'
+import { appendChild, removeChild } from '../../react-dom-binding/FiberConfigDOM'
 import { type FiberNode } from './ReactInternalTypes'
 
 let workInProgress: FiberNode | null = null

@@ -1,14 +1,16 @@
 import { ReactElementType } from 'shared'
 import { createFiberRoot } from './FiberRoot'
 import { createHostRootFiber, createFiberFromElement } from './Fiber'
-import { FiberNode } from './ReactInternalTypes'
+import { type FiberNode } from './ReactInternalTypes'
 import { workLoop } from './WorkLoop'
-import { appendChild } from './FiberConfigDOM'
+import { appendChild } from '../../react-dom-binding/FiberConfigDOM'
+import { listenToAllSupportedEvents } from '../../react-dom-binding/DOMPluginEventSystem'
 
 export function createContainer(containerInfo: HTMLElement) {
   const root = createFiberRoot(containerInfo)
   const hostRootFiber = createHostRootFiber()
   hostRootFiber.stateNode = root
+  listenToAllSupportedEvents(root.containerInfo)
   return hostRootFiber
 }
 

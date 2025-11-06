@@ -1,35 +1,39 @@
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
-let startTimout = true
-
 function App() {
   const [count, setCount] = useState(666)
-  const [count1, setCount1] = useState(777)
-  const [count2, setCount2] = useState(999)
+  const [text, setText] = useState('abc')
 
-  if (startTimout) {
-    startTimout = false
-    setTimeout(() => {
-      setCount(888)
-      setCount1(777 + 1)
-    }, 1000)
+  const handleClick = (e: any) => {
+    // e.stopPropagation()
+    setCount(count + 1)
+  }
+
+  const handleClick2 = (e: any) => {
+    console.log('div')
+  }
+
+  const handleInput = (e: any) => {
+    setText(e.target.value)
   }
 
   return (
-    <div>
-      <span>{count}</span>
-      <span>{count1}</span>
+    <div onClick={handleClick2}>
+      <span onClick={handleClick}>{count}</span>
+      <input
+        type='text'
+        value={text}
+        onInput={handleInput}
+      >
+        123
+      </input>
     </div>
   )
 }
 
 const element = (
-  <div id='container'>
-    <h1>123</h1>
-    <h2>
-      <span>456</span>
-    </h2>
+  <div>
     <App />
   </div>
 )

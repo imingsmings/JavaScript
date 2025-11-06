@@ -1,4 +1,4 @@
-import { appendChild, createInstance, createTextInstance, setInitialProps, type Instance } from './FiberConfigDOM'
+import { appendChild, createInstance, createTextInstance, setInitialProps, type Instance } from '../../react-dom-binding/FiberConfigDOM'
 import { FunctionComponent, HostComponent, HostText, type FiberNode } from './ReactInternalTypes'
 
 function appendAllChildren(parent: Instance, child: FiberNode | null) {
@@ -18,7 +18,7 @@ export function completeWork(fiber: FiberNode) {
     case FunctionComponent:
       break
     case HostComponent:
-      const instance = createInstance(fiber.type)
+      const instance = createInstance(fiber.type, fiber)
       appendAllChildren(instance, fiber.child)
       setInitialProps(instance, fiber.pendingProps)
       fiber.stateNode = instance
