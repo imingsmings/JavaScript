@@ -21,6 +21,7 @@ interface SyntheticEventConstructor {
 const SyntheticEvent = function (this: SyntheticEvent, nativeEvent: Event) {
   this.nativeEvent = nativeEvent
   this.currentTarget = null
+  this.target = null
 } as unknown as SyntheticEventConstructor
 
 SyntheticEvent.prototype.stopPropagation = function () {

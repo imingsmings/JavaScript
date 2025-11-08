@@ -24,15 +24,14 @@ export function removeChild(parent: Instance, child: Instance) {
 
 export function setInitialProps(dom: Instance, props: any) {
   for (const prop in props) {
-    if (!Object.hasOwn(props, prop)) {
-      continue
-    }
-    if (prop === 'children') {
-      if (typeof props.children === 'string' || typeof props.children === 'number') {
-        dom.textContent = props.children + ''
+    if (Object.hasOwn(props, prop)) {
+      if (prop === 'children') {
+        if (typeof props.children === 'string' || typeof props.children === 'number') {
+          dom.textContent = props.children + ''
+        }
+        continue
       }
-      continue
+      dom.setAttribute(prop, props[prop])
     }
-    dom.setAttribute(prop, props[prop])
   }
 }

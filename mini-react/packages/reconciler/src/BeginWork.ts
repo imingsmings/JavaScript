@@ -11,8 +11,6 @@ export function beginWork(fiber: FiberNode): FiberNode | null {
     case HostRoot:
       fiber.child = reconcileChildFibers(fiber, fiber.memoizedState.element)
       return fiber.child
-    case HostText:
-      return null
     case FunctionComponent:
       const children = renderWithHooks(fiber, fiber.type)
       fiber.child = reconcileChildFibers(fiber, children)
@@ -20,6 +18,7 @@ export function beginWork(fiber: FiberNode): FiberNode | null {
     case HostComponent:
       fiber.child = reconcileChildFibers(fiber, fiber.pendingProps.children)
       return fiber.child
+    case HostText:
     default:
       return null
   }

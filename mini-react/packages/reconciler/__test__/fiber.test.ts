@@ -7,7 +7,7 @@ describe('Fiber testing', () => {
   test('createFiber with key', () => {
     const type = HostComponent
     const key = 'testkey'
-    const fiber = createFiber(type, key)
+    const fiber = createFiber(type, key, null)
     expect(fiber).toEqual({
       tag: HostComponent,
       key,
@@ -19,13 +19,14 @@ describe('Fiber testing', () => {
       sibling: null,
       ref: null,
       pendingProps: null,
-      memoizedState: null
+      memoizedState: null,
+      alternate: null
     })
   })
 
   test('createFiber without key', () => {
     const type = HostComponent
-    const fiber = createFiber(type, null)
+    const fiber = createFiber(type, null, null)
     expect(fiber.key).toBeNull()
   })
 

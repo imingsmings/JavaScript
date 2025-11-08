@@ -24,8 +24,6 @@ export function updateOnFiber(fiberRoot: FiberRootNode) {
   const finishedWork = fiberRoot.current!.alternate!
   commitMutationEffects(finishedWork)
   fiberRoot.current = finishedWork
-
-  console.log(fiberRoot.current)
 }
 
 function performUnitOfWork(fiber: FiberNode) {

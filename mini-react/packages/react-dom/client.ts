@@ -5,6 +5,7 @@ import { createContainer, updateContainer } from '../reconciler/src/FiberReconci
 export type ReactDOMRootType = {
   _internalRoot: FiberRootNode
   render: (element: ReactElementType) => void
+  unmount: () => void
 }
 
 function ReactDOMRoot(fiberRoot: FiberRootNode): ReactDOMRootType {
@@ -12,7 +13,8 @@ function ReactDOMRoot(fiberRoot: FiberRootNode): ReactDOMRootType {
     _internalRoot: fiberRoot,
     render: function (element: ReactElementType) {
       updateContainer(element, this._internalRoot)
-    }
+    },
+    unmount: function () {}
   }
 }
 
