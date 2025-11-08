@@ -1,14 +1,12 @@
-import { REACT_ELEMENT_TYPE } from 'shared'
+import { REACT_ELEMENT_TYPE, ReactElementType } from 'shared'
 import { FiberNode } from './ReactInternalTypes'
-import { createFiberFromElement, createFiberFromText } from './Fiber'
+import { createFiberFromElement, createFiberFromText, createWorkInProgress } from './Fiber'
 
-export function reconcileChildFibers(fiber: FiberNode, children: any) {
-  // multiple element
+export function reconcileChildFibers(fiber: FiberNode, children: ReactElementType) {
   if (Array.isArray(children)) {
     return reconcileChildrenArray(fiber, children)
   }
 
-  // single element
   if (children.$$typeof === REACT_ELEMENT_TYPE) {
     return reconcileSingleElement(fiber, children)
   }
@@ -16,7 +14,12 @@ export function reconcileChildFibers(fiber: FiberNode, children: any) {
   return null
 }
 
-function reconcileSingleElement(returnFiber: FiberNode, children: any): FiberNode {
+function reconcileSingleElement(returnFiber: FiberNode, children: ReactElementType): FiberNode {
+  if (returnFiber.alternate?.child) {
+    const existing = createWorkInProgress(returnFiber.alternate.child, children.props)
+    existing.return = returnFiber
+    return existing
+  }
   const fiber = createFiberFromElement(children)
   fiber.return = returnFiber
   return fiber

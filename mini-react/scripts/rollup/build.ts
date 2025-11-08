@@ -7,7 +7,7 @@ const baseDirPath = process.cwd()
 const TypeScriptOptions = {
   tsconfig: path.resolve(baseDirPath, 'tsconfig.json'),
   exclude: ['**/*.test.ts', '**/*.spec.ts'],
-  declaration: true
+  declaration: false
 }
 
 export default [

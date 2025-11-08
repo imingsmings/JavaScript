@@ -18,8 +18,10 @@ export type FiberNode = {
   ref: any
   pendingProps: any
   memoizedState: any
+  alternate: FiberNode | null
 }
 
 export type FiberRootNode = {
   containerInfo: HTMLElement
+  current: FiberNode | null
 }

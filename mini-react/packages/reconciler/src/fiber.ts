@@ -1,7 +1,7 @@
 import { type ReactElementType } from 'shared'
 import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
 
-export function createFiber(tag: WorkTag, key: string | null): FiberNode {
+export function createFiber(tag: WorkTag, key: string | null, pendingProps: any): FiberNode {
   return {
     tag,
     key,
@@ -12,14 +12,15 @@ export function createFiber(tag: WorkTag, key: string | null): FiberNode {
     child: null,
     sibling: null,
     ref: null,
-    pendingProps: null,
-    memoizedState: null
+    pendingProps,
+    memoizedState: null,
+    alternate: null
   }
 }
 
 export function createFiberFromTypeAndProps(type: any, props: any, key: string | null): FiberNode {
   const fiberTag: WorkTag = typeof type === 'function' ? FunctionComponent : HostComponent
-  const fiber = createFiber(fiberTag, key)
+  const fiber = createFiber(fiberTag, key, null)
   fiber.elementType = type
   fiber.type = type
   fiber.pendingProps = props
@@ -33,12 +34,29 @@ export function createFiberFromElement(element: ReactElementType): FiberNode {
 }
 
 export function createFiberFromText(text: string): FiberNode {
-  const fiber = createFiber(HostText, null)
+  const fiber = createFiber(HostText, null, null)
   fiber.pendingProps = text
   return fiber
 }
 
 export function createHostRootFiber(): FiberNode {
-  const fiber = createFiber(HostRoot, null)
+  const fiber = createFiber(HostRoot, null, null)
   return fiber
+}
+
+export function createWorkInProgress(current: FiberNode, pendingProps: any): FiberNode {
+  let workInProgress = current.alternate
+  if (workInProgress === null) {
+    workInProgress = createFiber(current.tag, current.key, pendingProps)
+    workInProgress.type = current.type
+    workInProgress.stateNode = current.stateNode
+    workInProgress.alternate = current
+    current.alternate = workInProgress
+  } else {
+    workInProgress.pendingProps = pendingProps
+  }
+
+  workInProgress.memoizedState = current.memoizedState
+
+  return workInProgress
 }

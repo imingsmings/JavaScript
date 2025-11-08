@@ -1,15 +1,16 @@
-import { FiberNode, FunctionComponent, HostComponent, HostText } from './ReactInternalTypes'
+import { FiberNode, FunctionComponent, HostComponent, HostRoot, HostText } from './ReactInternalTypes'
 import { reconcileChildFibers } from './ChildFiber'
 import { renderWithHooks } from './FiberHook'
 
 export function beginWork(fiber: FiberNode): FiberNode | null {
-  const childrenProps = fiber.pendingProps.children
-
-  if (typeof childrenProps === 'string' || typeof childrenProps === 'number') {
+  if (typeof fiber.pendingProps?.children === 'string' || typeof fiber.pendingProps?.children === 'number') {
     return null
   }
 
   switch (fiber.tag) {
+    case HostRoot:
+      fiber.child = reconcileChildFibers(fiber, fiber.memoizedState.element)
+      return fiber.child
     case HostText:
       return null
     case FunctionComponent:
@@ -17,7 +18,7 @@ export function beginWork(fiber: FiberNode): FiberNode | null {
       fiber.child = reconcileChildFibers(fiber, children)
       return fiber.child
     case HostComponent:
-      fiber.child = reconcileChildFibers(fiber, childrenProps)
+      fiber.child = reconcileChildFibers(fiber, fiber.pendingProps.children)
       return fiber.child
     default:
       return null

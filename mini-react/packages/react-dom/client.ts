@@ -1,15 +1,15 @@
 import { ReactElementType } from 'shared'
-import { type FiberNode } from '../reconciler/src/ReactInternalTypes'
+import { type FiberRootNode } from '../reconciler/src/ReactInternalTypes'
 import { createContainer, updateContainer } from '../reconciler/src/FiberReconciler'
 
 export type ReactDOMRootType = {
-  _internalRoot: FiberNode
+  _internalRoot: FiberRootNode
   render: (element: ReactElementType) => void
 }
 
-function ReactDOMRoot(root: FiberNode): ReactDOMRootType {
+function ReactDOMRoot(fiberRoot: FiberRootNode): ReactDOMRootType {
   return {
-    _internalRoot: root,
+    _internalRoot: fiberRoot,
     render: function (element: ReactElementType) {
       updateContainer(element, this._internalRoot)
     }
@@ -17,7 +17,6 @@ function ReactDOMRoot(root: FiberNode): ReactDOMRootType {
 }
 
 export function createRoot(container: HTMLElement): ReactDOMRootType {
-  const hostRootFiber = createContainer(container)
-  const root = ReactDOMRoot(hostRootFiber)
-  return root
+  const fiberRoot = createContainer(container)
+  return ReactDOMRoot(fiberRoot)
 }

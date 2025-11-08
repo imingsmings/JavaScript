@@ -1,22 +1,31 @@
 import { beginWork } from './BeginWork'
 import { completeWork } from './CompleteWork'
-import { appendChild, removeChild } from '../../react-dom-binding/FiberConfigDOM'
-import { type FiberNode } from './ReactInternalTypes'
+import { removeChild } from '../../react-dom-binding/FiberConfigDOM'
+import { type FiberRootNode, type FiberNode } from './ReactInternalTypes'
+import { commitMutationEffects } from './CommitWork'
+import { createWorkInProgress } from './Fiber'
 
 let workInProgress: FiberNode | null = null
 
-export function workLoop(fiber: FiberNode) {
-  workInProgress = fiber
+export function workLoop() {
   while (workInProgress !== null) {
     performUnitOfWork(workInProgress)
   }
 }
 
-export function updateOnFiber(fiber: FiberNode) {
-  const hostRootFiber = getRootForUpdatedFiber(fiber)
-  removeChild(hostRootFiber.stateNode.containerInfo, hostRootFiber.child?.stateNode)
-  workLoop(fiber)
-  appendChild(hostRootFiber.stateNode.containerInfo, hostRootFiber.child?.stateNode)
+export function updateOnFiber(fiberRoot: FiberRootNode) {
+  if (fiberRoot.current?.child?.stateNode) {
+    removeChild(fiberRoot.containerInfo, fiberRoot.current.child?.stateNode)
+  }
+
+  workInProgress = createWorkInProgress(fiberRoot.current!, fiberRoot.current!.pendingProps)
+  workLoop()
+
+  const finishedWork = fiberRoot.current!.alternate!
+  commitMutationEffects(finishedWork)
+  fiberRoot.current = finishedWork
+
+  console.log(fiberRoot.current)
 }
 
 function performUnitOfWork(fiber: FiberNode) {
@@ -44,10 +53,10 @@ function completeUnifOfWork(fiber: FiberNode) {
   } while (completedFiber !== null)
 }
 
-function getRootForUpdatedFiber(fiber: FiberNode) {
+export function getRootForUpdatedFiber(fiber: FiberNode): FiberRootNode {
   let node: FiberNode = fiber
   while (node.return) {
     node = node.return
   }
-  return node
+  return node.stateNode
 }
