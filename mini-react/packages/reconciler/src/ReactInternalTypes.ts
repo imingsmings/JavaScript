@@ -1,3 +1,5 @@
+import { type Flags } from './FiberFlags'
+
 export const FunctionComponent = 0
 export const HostRoot = 3
 export const HostComponent = 5
@@ -19,6 +21,8 @@ export type FiberNode = {
   pendingProps: any
   memoizedState: any
   alternate: FiberNode | null
+  flags: Flags
+  deletions: FiberNode[] | null
 }
 
 export type FiberRootNode = {

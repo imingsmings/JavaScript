@@ -1,5 +1,6 @@
 import { type ReactElementType } from 'shared'
 import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode, type WorkTag } from './ReactInternalTypes'
+import { NoFlags } from './FiberFlags'
 
 export function createFiber(tag: WorkTag, key: string | null, pendingProps: any): FiberNode {
   return {
@@ -14,7 +15,9 @@ export function createFiber(tag: WorkTag, key: string | null, pendingProps: any)
     ref: null,
     pendingProps,
     memoizedState: null,
-    alternate: null
+    alternate: null,
+    flags: NoFlags,
+    deletions: null
   }
 }
 

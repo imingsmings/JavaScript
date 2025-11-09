@@ -2,6 +2,7 @@ import { HostComponent } from '../src/ReactInternalTypes'
 import { createFiber, createFiberFromElement, createFiberFromTypeAndProps } from '../src/Fiber'
 import { ReactElementType } from 'shared'
 import { jsx } from 'react/jsx-runtime'
+import { NoFlags } from '../src/FiberFlags'
 
 describe('Fiber testing', () => {
   test('createFiber with key', () => {
@@ -20,7 +21,9 @@ describe('Fiber testing', () => {
       ref: null,
       pendingProps: null,
       memoizedState: null,
-      alternate: null
+      alternate: null,
+      flags: NoFlags,
+      deletions: null
     })
   })
 
