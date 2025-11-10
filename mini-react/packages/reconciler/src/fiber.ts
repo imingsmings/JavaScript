@@ -18,7 +18,8 @@ export function createFiber(tag: WorkTag, key: string | null, pendingProps: any)
     alternate: null,
     flags: NoFlags,
     deletions: null,
-    index: 0
+    index: 0,
+    subtreeFlags: NoFlags
   }
 }
 

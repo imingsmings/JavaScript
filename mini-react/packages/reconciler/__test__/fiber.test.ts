@@ -24,7 +24,8 @@ describe('Fiber testing', () => {
       alternate: null,
       flags: NoFlags,
       deletions: null,
-      index: 0
+      index: 0,
+      subtreeFlags: 0
     })
   })
 

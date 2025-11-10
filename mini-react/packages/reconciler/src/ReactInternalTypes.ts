@@ -24,6 +24,7 @@ export type FiberNode = {
   flags: Flags
   deletions: FiberNode[] | null
   index: number
+  subtreeFlags: number
 }
 
 export type FiberRootNode = {
