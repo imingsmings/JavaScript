@@ -23,6 +23,7 @@ function reconcileSingleElement(returnFiber: FiberNode, children: ReactElementTy
         // key 和 type 都相同，则可复用
         const existing = createWorkInProgress(child!, children.props)
         existing.return = returnFiber
+        // 重制索引
         existing.index = 0
         deleteRemainingChildren(returnFiber, child!.sibling)
         // 删除其余元素
@@ -44,6 +45,7 @@ function reconcileSingleElement(returnFiber: FiberNode, children: ReactElementTy
 }
 
 function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberNode | null {
+  // 返回第一个子节点
   let returnFirstChild: FiberNode | null = null
   let previousNewFiber: FiberNode | null = null
 
@@ -58,15 +60,17 @@ function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberN
   for (; oldFiber !== null && newIndex < children.length; newIndex++) {
     // 判断节点是否在当前位置可以复用，可以则返回当前节点，不可以则返回 null
     const newFiber = updateSlot(returnFiber, oldFiber, children[newIndex])
-    // 如果不能则跳出第一节阶段
+    // 如果不能复用则跳出第一节阶段
     if (newFiber === null) {
       break
     }
     // 如果可以复用，但key相同而type不同，则删除current树上的旧节点 A -> B -> C => [A', B, C]
+    // (如果旧节点存在且判断后的新fiber的alternate为null, 则说明没有命中复用条件，需要删除旧的节点)
     if (oldFiber && newFiber.alternate === null) {
+      // 标记删除
       deleteChild(returnFiber, oldFiber)
     }
-    // 打标记
+    // 目前前为止，不需要移动的旧节点里最大的 oldIndex
     lastPlacedIndex = placeChid(newFiber, lastPlacedIndex, newIndex)
     // 构建fiber链
     if (previousNewFiber === null) {
@@ -86,12 +90,17 @@ function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberN
     return returnFirstChild
   }
   // 2. 新树比旧树长，A -> B -> C => [A, B, C, D], 剩余的新树节点全部创建
+  // 如果新树比旧树长，第一阶段中 最后一个子节点的 oldFiber = fiber.sibling 为 null
   if (oldFiber === null) {
+    // 此时的 newIndex 从新的元素的对应索引开始
     for (; newIndex < children.length; newIndex++) {
       const element = children[newIndex]
+      // 创建新的fibe
       const newFiber = typeof element === 'string' || typeof element === 'number' ? createFiberFromText(element + '') : createFiberFromElement(element)
       newFiber.return = returnFiber
+      // 更新索引
       lastPlacedIndex = placeChid(newFiber, lastPlacedIndex, newIndex)
+      // 构建fiber链
       if (previousNewFiber === null) {
         returnFirstChild = newFiber
       } else {
@@ -110,7 +119,7 @@ function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberN
     const newFiber = updateFromMap(existingChildren, returnFiber, newIndex, children[newIndex])!
     // 如果节点是复用的，就删除map中的节点
     if (newFiber.alternate !== null) {
-      existingChildren.delete(`${newFiber.key === null ? newIndex : newFiber.key}`)
+      existingChildren.delete(newFiber.key === null ? newIndex : newFiber.key)
     }
     // 打标记
     lastPlacedIndex = placeChid(newFiber, lastPlacedIndex, newIndex)
@@ -124,6 +133,7 @@ function reconcileChildrenArray(returnFiber: FiberNode, children: any[]): FiberN
     previousNewFiber = newFiber
   }
 
+  // 清理剩余节点
   existingChildren.forEach((child: FiberNode) => deleteChild(returnFiber, child))
 
   return returnFirstChild
@@ -155,26 +165,29 @@ function deleteRemainingChildren(returnFiber: FiberNode, childrenToDelete: Fiber
 }
 
 function updateTextNode(returnFiber: FiberNode, oldFiber: FiberNode | null, textContent: string) {
+  // 如果旧节点不是文本节点，则创建新的文本元素
   if (oldFiber === null || oldFiber.tag !== HostText) {
     const fiber = createFiberFromText(textContent)
     fiber.return = returnFiber
     return fiber
   }
 
+  // 如果旧节点是文本节点，则复用
   const existing = createWorkInProgress(oldFiber, textContent)
   existing.return = returnFiber
   return existing
 }
 
 function updateElement(returnFiber: FiberNode, oldFiber: FiberNode | null, element: any): FiberNode {
-  const elementType = element.type
   if (oldFiber !== null) {
-    if (oldFiber.type === elementType) {
+    // 如果类型相同则可复用
+    if (oldFiber.type === element.type) {
       const existing = createWorkInProgress(oldFiber, element.props)
       existing.return = returnFiber
       return existing
     }
   }
+  // 否则创建新元素
   const fiber = createFiberFromElement(element)
   fiber.return = returnFiber
   return fiber
@@ -186,17 +199,20 @@ function updateSlot(returnFiber: FiberNode, oldFiber: FiberNode, newChild: any):
 
   // 如果新节点是文本节点
   if (typeof newChild === 'string' || typeof newChild === 'number') {
-    // 如果旧节点有key，则不能进行文本节点更新
+    // 如果旧节点有key，则不能再当前位置更新，因为文本节点没有 key
     if (key !== null) {
       return null
     }
-    // 更新文本节点
-    return updateTextNode(returnFiber, oldFiber, newChild + '')
+    // 更新文本节点 (当前阶段,旧节点可能是元素节点或文本节点，需要进一步判断)
+    return updateTextNode(returnFiber, oldFiber, `${newChild}`)
   }
 
+  // 如果新节点是对象
   if (typeof newChild === 'object' && newChild !== null) {
     switch (newChild.$$typeof) {
+      // 新节点是ReactElement
       case REACT_ELEMENT_TYPE:
+        // 如果key相同则有可能复用(需要进一步判断type)
         if (newChild.key === key) {
           return updateElement(returnFiber, oldFiber, newChild)
         }
@@ -213,19 +229,30 @@ function placeChid(newFiber: FiberNode, lastPlacedIndex: number, newIndex: numbe
   // 获取旧节点
   const current = newFiber.alternate
   if (current !== null) {
+    // 旧的索引
     const oldIndex = current.index
+    /**
+    lastPlacedIndex = 0
+    A B C => B C A 
+    元素 旧索引
+     B    1   1 >= lastPlacedIndex -> lastPlacedIndex = 1
+     C    2   2 >= lastPlacedIndex -> lastPlacedIndex = 2
+     A    0   0 < lastPlacedIndex -> lastPlacedIndex = 2 移动
+     */
     if (oldIndex < lastPlacedIndex) {
+      // 打移动标记
       newFiber.flags |= Placement
       return lastPlacedIndex
     }
-    return oldIndex
+    return Math.max(lastPlacedIndex, oldIndex)
   }
 
+  // 打移动标记
   newFiber.flags |= Placement
   return lastPlacedIndex
 }
 
-type ExistingChildrenMapType = Map<string, FiberNode>
+type ExistingChildrenMapType = Map<string | number, FiberNode>
 
 function mapRemainingChildren(currentFirstChild: FiberNode | null): ExistingChildrenMapType {
   const existingChildren: ExistingChildrenMapType = new Map()
@@ -233,7 +260,7 @@ function mapRemainingChildren(currentFirstChild: FiberNode | null): ExistingChil
   let child = currentFirstChild
 
   while (child !== null) {
-    existingChildren.set(`${child.key === null ? child.index : child.key}`, child)
+    existingChildren.set(child.key === null ? child.index : child.key, child)
     child = child.sibling
   }
 
@@ -241,8 +268,11 @@ function mapRemainingChildren(currentFirstChild: FiberNode | null): ExistingChil
 }
 
 function updateFromMap(existingChildren: ExistingChildrenMapType, returnFiber: FiberNode, newIndex: number, newChild: any): FiberNode | null {
+  // 如果新元素是文本节点
   if (typeof newChild === 'string' || typeof newChild === 'number') {
-    const matchedFiber = existingChildren.get(`${newIndex}`) || null
+    // 获取匹配的fiber
+    const matchedFiber = existingChildren.get(newIndex) || null
+    // 更新
     return updateTextNode(returnFiber, matchedFiber, newChild as string)
   }
 

@@ -18,7 +18,11 @@ function App() {
   //   setText(e.target.value)
   // }
 
-  return <p onClick={handleClick}>{count}</p>
+  return (
+    <div>
+      <p onClick={handleClick}>{count}</p>
+    </div>
+  )
 }
 
 const element = (
