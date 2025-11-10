@@ -23,7 +23,8 @@ describe('Fiber testing', () => {
       memoizedState: null,
       alternate: null,
       flags: NoFlags,
-      deletions: null
+      deletions: null,
+      index: 0
     })
   })
 

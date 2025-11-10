@@ -23,6 +23,7 @@ export type FiberNode = {
   alternate: FiberNode | null
   flags: Flags
   deletions: FiberNode[] | null
+  index: number
 }
 
 export type FiberRootNode = {

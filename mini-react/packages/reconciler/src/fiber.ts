@@ -17,7 +17,8 @@ export function createFiber(tag: WorkTag, key: string | null, pendingProps: any)
     memoizedState: null,
     alternate: null,
     flags: NoFlags,
-    deletions: null
+    deletions: null,
+    index: 0
   }
 }
 
