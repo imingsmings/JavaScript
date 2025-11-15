@@ -14,10 +14,6 @@ export function workLoop() {
 }
 
 export function updateOnFiber(fiberRoot: FiberRootNode) {
-  if (fiberRoot.current?.child?.stateNode) {
-    removeChild(fiberRoot.containerInfo, fiberRoot.current.child?.stateNode)
-  }
-
   workInProgress = createWorkInProgress(fiberRoot.current!, fiberRoot.current!.pendingProps)
   workLoop()
 

@@ -59,6 +59,8 @@ export function createWorkInProgress(current: FiberNode, pendingProps: any): Fib
     current.alternate = workInProgress
   } else {
     workInProgress.pendingProps = pendingProps
+    workInProgress.flags = NoFlags
+    workInProgress.subtreeFlags = NoFlags
   }
 
   workInProgress.memoizedState = current.memoizedState

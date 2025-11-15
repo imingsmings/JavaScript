@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client'
 
 function App() {
   const [count, setCount] = useState(666)
+  const [count1, setCount1] = useState(888)
   // const [text, setText] = useState('abc')
 
   const handleClick = (e: any) => {
     // e.stopPropagation()
     setCount(count + 1)
+    setCount1(count1 + 2)
   }
 
   // const handleClick2 = (e: any) => {
@@ -19,9 +21,13 @@ function App() {
   // }
 
   return (
-    <div>
-      <p onClick={handleClick}>{count}</p>
-    </div>
+    <span
+      onClick={handleClick}
+      style={{ color: 'red', fontSize: '20px', backgroundColor: 'skyblue' }}
+    >
+      {count}
+      {count1}
+    </span>
   )
 }
 
@@ -31,4 +37,4 @@ const element = (
   </div>
 )
 
-createRoot(document.getElementById('root')!).render(element)
+createRoot(document.getElementById('root')!).render(<App />)
