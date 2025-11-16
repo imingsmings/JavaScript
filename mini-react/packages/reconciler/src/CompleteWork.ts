@@ -1,4 +1,5 @@
 import { appendChild, createInstance, createTextInstance, setInitialProps, type Instance } from '../../react-dom-binding/FiberConfigDOM'
+import { precacheFiberNode } from '../../react-dom-binding/ReactDOMComponentTree'
 import { NoFlags, Update } from './FiberFlags'
 import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode } from './ReactInternalTypes'
 
@@ -50,12 +51,14 @@ function updateHostComponent(workInProgress: FiberNode, oldProps: any, newProps:
   if (oldProps !== newProps) {
     makeUpdate(workInProgress)
   }
+  precacheFiberNode(workInProgress, workInProgress.stateNode)
 }
 
 function updateHostText(workInProgress: FiberNode, oldText: string, newText: string) {
   if (oldText !== newText) {
     makeUpdate(workInProgress)
   }
+  precacheFiberNode(workInProgress, workInProgress.stateNode)
 }
 
 function makeUpdate(workInProgress: FiberNode) {

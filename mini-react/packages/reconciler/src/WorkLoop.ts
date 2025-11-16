@@ -1,8 +1,7 @@
 import { beginWork } from './BeginWork'
 import { completeWork } from './CompleteWork'
-import { removeChild } from '../../react-dom-binding/FiberConfigDOM'
 import { type FiberRootNode, type FiberNode } from './ReactInternalTypes'
-import { commitMutationEffects } from './CommitWork'
+import { commitMutationEffects, commitPassiveUnmountEffects } from './CommitWork'
 import { createWorkInProgress } from './Fiber'
 
 let workInProgress: FiberNode | null = null
@@ -16,10 +15,10 @@ export function workLoop() {
 export function updateOnFiber(fiberRoot: FiberRootNode) {
   workInProgress = createWorkInProgress(fiberRoot.current!, fiberRoot.current!.pendingProps)
   workLoop()
-
   const finishedWork = fiberRoot.current!.alternate!
   commitMutationEffects(finishedWork)
   fiberRoot.current = finishedWork
+  commitPassiveUnmountEffects(finishedWork)
 }
 
 function performUnitOfWork(fiber: FiberNode) {

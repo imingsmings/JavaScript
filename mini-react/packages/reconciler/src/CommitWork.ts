@@ -1,10 +1,118 @@
 import { appendChild, insertBefore, Instance, removeChild, setProp, updateTextNode } from '../../react-dom-binding/FiberConfigDOM'
-import { MutationMask, NoFlags, Placement, Update } from './FiberFlags'
+import { detachDeletedInstance } from '../../react-dom-binding/ReactDOMComponentTree'
+import { ChildDeletion, MutationMask, NoFlags, Placement, Update } from './FiberFlags'
 import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode } from './ReactInternalTypes'
 
 let hostParent: HTMLElement | null = null
 let hostParentIsContainer: boolean = false
+let nextEffect: FiberNode | null = null
 
+// ---------------- Commit Passive ----------------
+export function commitPassiveUnmountEffects(finishedWork: FiberNode) {
+  commitPassiveUnmountEffectsOnFiber(finishedWork)
+}
+
+function commitPassiveUnmountEffectsOnFiber(finishedWork: FiberNode) {
+  switch (finishedWork.tag) {
+    case FunctionComponent:
+      recursivelyTraversePassiveUnmountEffects(finishedWork)
+      break
+    case HostRoot:
+      recursivelyTraversePassiveUnmountEffects(finishedWork)
+      break
+    default:
+      recursivelyTraversePassiveUnmountEffects(finishedWork)
+      break
+  }
+}
+
+function recursivelyTraversePassiveUnmountEffects(finishedWork: FiberNode) {
+  if ((finishedWork.flags & ChildDeletion) !== NoFlags) {
+    const deletions = finishedWork.deletions
+    if (deletions !== null) {
+      for (let i = 0; i < deletions.length; i++) {
+        const childToDelete = deletions[i]
+        nextEffect = childToDelete
+        commitPassiveUnmountEffectsInsideOfDeletedTreeBegin(childToDelete)
+      }
+    }
+    detachAlternateSibling(finishedWork)
+  }
+
+  if ((finishedWork.subtreeFlags & ChildDeletion) !== NoFlags) {
+    let child = finishedWork.child
+    while (child !== null) {
+      commitPassiveUnmountEffectsOnFiber(child)
+      child = child.sibling
+    }
+  }
+}
+
+function commitPassiveUnmountEffectsInsideOfDeletedTreeBegin(childToDelete: FiberNode) {
+  while (nextEffect !== null) {
+    if (nextEffect.child !== null) {
+      nextEffect = nextEffect.child
+    } else {
+      commitPassiveUnmountEffectsInsideOfDeletedTreeComplete(childToDelete)
+    }
+  }
+}
+
+function commitPassiveUnmountEffectsInsideOfDeletedTreeComplete(childToDelete: FiberNode) {
+  while (nextEffect !== null) {
+    const fiber = nextEffect
+    const sibling = fiber.sibling
+    const returnFiber = fiber.return
+
+    detachFiberAfterEffects(fiber)
+
+    if (fiber === childToDelete) {
+      nextEffect = null
+      return
+    }
+
+    if (sibling !== null) {
+      nextEffect = sibling
+      return
+    }
+
+    nextEffect = returnFiber
+  }
+}
+
+function detachAlternateSibling(finishedWork: FiberNode) {
+  const previousFiber = finishedWork.alternate
+  if (previousFiber !== null) {
+    let detachedChild = previousFiber.child
+    if (detachedChild !== null) {
+      previousFiber.child = null
+      do {
+        const sibling: FiberNode | null = detachedChild.sibling
+        detachedChild.sibling = null
+        detachedChild = sibling
+      } while (detachedChild !== null)
+    }
+  }
+}
+
+function detachFiberAfterEffects(fiber: FiberNode) {
+  const alternate = fiber.alternate
+  if (alternate !== null) {
+    fiber.alternate = null
+    detachFiberAfterEffects(alternate)
+  }
+  if (fiber.tag === HostComponent) {
+    const dom = fiber.stateNode
+    dom && detachDeletedInstance(dom)
+  }
+  fiber.child = null
+  fiber.sibling = null
+  fiber.deletions = null
+  fiber.stateNode = null
+  fiber.return = null
+}
+
+// ---------------- Commit Mutation ----------------
 export function commitMutationEffects(finishedWork: FiberNode) {
   commitMutationEffectsOnFiber(finishedWork)
 }
@@ -70,7 +178,6 @@ function recursivelyTraverseMutationEffects(finishedWork: FiberNode) {
  * Update
  */
 function commitHostUpdate(dom: Instance, oldProps: any, newProps: any) {
-  // 删除不存在的旧属性
   for (const oldKey in oldProps) {
     const oldValue = oldProps[oldKey]
     if (Object.hasOwn(oldProps, oldKey) && oldValue !== null && !Object.hasOwn(newProps, oldKey)) {
@@ -81,6 +188,7 @@ function commitHostUpdate(dom: Instance, oldProps: any, newProps: any) {
   for (const newKey in newProps) {
     const newValue = newProps[newKey]
     const oldValue = oldProps[newKey]
+
     if (Object.hasOwn(newProps, newKey) && newValue !== oldValue && newValue !== null) {
       setProp(dom, newKey, newValue)
     }

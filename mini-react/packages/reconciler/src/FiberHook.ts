@@ -63,7 +63,7 @@ export function renderWithHooks(workInProgress: FiberNode, Component: Function) 
     ReactSharedInternals.H = updateState
   }
 
-  const children = Component()
+  const children = Component(workInProgress.pendingProps)
   workInProgressHook = null
 
   return children
