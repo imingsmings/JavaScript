@@ -2,7 +2,7 @@ import { ReactElementType } from 'shared'
 import { createFiberRoot } from './FiberRoot'
 import { createHostRootFiber } from './Fiber'
 import { type FiberRootNode } from './ReactInternalTypes'
-import { updateOnFiber } from './WorkLoop'
+import { scheduleUpdateOnFiber } from './WorkLoop'
 import { listenToAllSupportedEvents } from '../../react-dom-binding/DOMPluginEventSystem'
 
 export function createContainer(containerInfo: HTMLElement) {
@@ -17,5 +17,5 @@ export function createContainer(containerInfo: HTMLElement) {
 
 export function updateContainer(element: ReactElementType, fiberRoot: FiberRootNode) {
   fiberRoot.current!.memoizedState.element = element
-  updateOnFiber(fiberRoot)
+  scheduleUpdateOnFiber(fiberRoot)
 }

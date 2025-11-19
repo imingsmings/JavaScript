@@ -1,5 +1,5 @@
 import { type FiberNode } from './ReactInternalTypes'
-import { getRootForUpdatedFiber, updateOnFiber } from './WorkLoop'
+import { getRootForUpdatedFiber, scheduleUpdateOnFiber } from './WorkLoop'
 import { ReactSharedInternals } from 'react'
 
 export type Hook = {
@@ -14,7 +14,7 @@ let workInProgressHook: Hook | null = null
 function dispatchSetState(fiber: FiberNode, hook: Hook, newState: any) {
   hook.memoizedState = newState
   const fiberRoot = getRootForUpdatedFiber(fiber)
-  updateOnFiber(fiberRoot!)
+  scheduleUpdateOnFiber(fiberRoot!)
 }
 
 function mountWorkInProgressHook(initialState: any) {

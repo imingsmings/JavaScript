@@ -78,3 +78,15 @@ function getPropType(prop: string, value: any) {
 function isEventProp(prop: string, value: any) {
   return /^on[A-Z]/.test(prop) && typeof value === 'function'
 }
+
+export const scheduleMircoTask = (() => {
+  if (typeof queueMicrotask === 'function') {
+    return queueMicrotask
+  }
+
+  if (typeof Promise === 'function') {
+    return (callback: () => void) => Promise.resolve(callback)
+  }
+
+  return setTimeout
+})()

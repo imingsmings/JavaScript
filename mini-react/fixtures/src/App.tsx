@@ -16,6 +16,8 @@ function App() {
     setList(newList)
   }
 
+  console.log('App Render')
+
   return (
     <div>
       <span
