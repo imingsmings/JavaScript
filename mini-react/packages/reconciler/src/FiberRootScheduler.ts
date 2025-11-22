@@ -1,12 +1,15 @@
 import { scheduleMircoTask } from '../../react-dom-binding/FiberConfigDOM'
 import { performWorkOnRoot } from './WorkLoop'
+import { scheduleCallback } from './Scheduler'
 
 let didScheduleMircoTask = false
 
 function schedulerImmediateRootSchedulerTask() {
   scheduleMircoTask(() => {
     didScheduleMircoTask = false
-    performWorkOnRoot()
+    scheduleCallback(() => {
+      performWorkOnRoot()
+    })
   })
 }
 

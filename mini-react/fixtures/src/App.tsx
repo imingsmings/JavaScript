@@ -38,6 +38,11 @@ function App() {
         b={count1}
         updater={handleClick}
       />
+      <div>
+        {Array.from({ length: 50000 }).map((item, index) => {
+          return <div key={index}>{index}</div>
+        })}
+      </div>
     </div>
   )
 }

@@ -4,9 +4,11 @@ import { type FiberRootNode, type FiberNode } from './ReactInternalTypes'
 import { commitMutationEffects, commitPassiveUnmountEffects } from './CommitWork'
 import { createWorkInProgress } from './Fiber'
 import { ensureRootScheduled } from './FiberRootScheduler'
+import { getCurrentTime, getStartTime, scheduleCallback, setStartTime, shouldYield } from './Scheduler'
 
 let workInProgress: FiberNode | null = null
 let workInProgressRoot: FiberRootNode | null = null
+let rootStatus = 0
 
 export function scheduleUpdateOnFiber(fiberRoot: FiberRootNode) {
   if (workInProgressRoot === null) {
@@ -29,17 +31,38 @@ export function getRootForUpdatedFiber(fiber: FiberNode): FiberRootNode {
 }
 
 function udpateOnFiber(fiberRoot: FiberRootNode) {
-  workInProgress = createWorkInProgress(fiberRoot.current!, fiberRoot.current!.pendingProps)
+  if (workInProgress === null) {
+    workInProgress = createWorkInProgress(fiberRoot.current!, fiberRoot.current!.pendingProps)
+  }
+
+  if (getStartTime() < 0) {
+    setStartTime(getCurrentTime())
+  }
+
   workLoop()
-  const finishedWork = fiberRoot.current!.alternate!
-  commitMutationEffects(finishedWork)
-  fiberRoot.current = finishedWork
-  commitPassiveUnmountEffects(finishedWork)
+
+  if (rootStatus == 1) {
+    const finishedWork = fiberRoot.current!.alternate!
+    commitMutationEffects(finishedWork)
+    fiberRoot.current = finishedWork
+    scheduleCallback(() => {
+      commitPassiveUnmountEffects(finishedWork)
+    })
+    workInProgressRoot = null
+    setStartTime(-1)
+    return
+  }
+
+  ensureRootScheduled()
 }
 
 function workLoop() {
-  while (workInProgress !== null) {
+  while (workInProgress !== null && !shouldYield()) {
     performUnitOfWork(workInProgress)
+  }
+
+  if (workInProgress === null) {
+    rootStatus = 1
   }
 }
 
