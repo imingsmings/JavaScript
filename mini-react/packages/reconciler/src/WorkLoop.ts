@@ -1,7 +1,7 @@
 import { beginWork } from './BeginWork'
 import { completeWork } from './CompleteWork'
 import { type FiberRootNode, type FiberNode } from './ReactInternalTypes'
-import { commitMutationEffects, commitPassiveUnmountEffects } from './CommitWork'
+import { commitMutationEffects, commitPassiveMountEffects, commitPassiveUnmountEffects } from './CommitWork'
 import { createWorkInProgress } from './Fiber'
 import { ensureRootScheduled } from './FiberRootScheduler'
 import { getCurrentTime, getStartTime, scheduleCallback, setStartTime, shouldYield } from './Scheduler'
@@ -18,7 +18,9 @@ export function scheduleUpdateOnFiber(fiberRoot: FiberRootNode) {
 }
 
 export function performWorkOnRoot() {
-  const fiberRoot = workInProgressRoot!
+  const fiberRoot = workInProgressRoot
+  if (fiberRoot === null) return
+
   udpateOnFiber(fiberRoot)
 }
 
@@ -47,9 +49,10 @@ function udpateOnFiber(fiberRoot: FiberRootNode) {
     fiberRoot.current = finishedWork
     scheduleCallback(() => {
       commitPassiveUnmountEffects(finishedWork)
+      commitPassiveMountEffects(finishedWork)
     })
-    workInProgressRoot = null
     setStartTime(-1)
+    workInProgressRoot = null
     return
   }
 

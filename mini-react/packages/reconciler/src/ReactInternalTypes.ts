@@ -1,4 +1,5 @@
 import { type Flags } from './FiberFlags'
+import { FunctionComponentUpdateQueue } from './EffectHook'
 
 export const FunctionComponent = 0
 export const HostRoot = 3
@@ -25,6 +26,7 @@ export type FiberNode = {
   deletions: FiberNode[] | null
   index: number
   subtreeFlags: number
+  updateQueue: FunctionComponentUpdateQueue | null
 }
 
 export type FiberRootNode = {

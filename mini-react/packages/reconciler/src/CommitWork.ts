@@ -1,11 +1,56 @@
 import { appendChild, insertBefore, Instance, removeChild, setProp, updateTextNode } from '../../react-dom-binding/FiberConfigDOM'
 import { detachDeletedInstance } from '../../react-dom-binding/ReactDOMComponentTree'
-import { ChildDeletion, MutationMask, NoFlags, Placement, Update } from './FiberFlags'
+import { HasEffect } from './EffectHook'
+import { ChildDeletion, MutationMask, NoFlags, PassiveEffect, Placement, Update } from './FiberFlags'
 import { FunctionComponent, HostComponent, HostRoot, HostText, type FiberNode } from './ReactInternalTypes'
 
 let hostParent: HTMLElement | null = null
 let hostParentIsContainer: boolean = false
 let nextEffect: FiberNode | null = null
+
+export function commitPassiveMountEffects(finishedWork: FiberNode) {
+  commitPassiveMountEffectsOnFiber(finishedWork)
+}
+
+function commitPassiveMountEffectsOnFiber(finishedWork: FiberNode) {
+  switch (finishedWork.tag) {
+    case FunctionComponent: {
+      recursivelyTraversePassiveMountEffects(finishedWork)
+      if ((finishedWork.flags & PassiveEffect) !== NoFlags) {
+        commitHookPassiveMountEffects(finishedWork)
+      }
+      break
+    }
+    default:
+      recursivelyTraversePassiveMountEffects(finishedWork)
+      break
+  }
+}
+
+function recursivelyTraversePassiveMountEffects(finishedWork: FiberNode) {
+  let child = finishedWork.child
+  while (child !== null) {
+    commitPassiveMountEffectsOnFiber(child)
+    child = child.sibling
+  }
+}
+
+function commitHookPassiveMountEffects(finishedWork: FiberNode) {
+  const updateQueue = finishedWork.updateQueue
+  if (updateQueue === null) return
+
+  const lastEffect = updateQueue.lastEffect
+  if (lastEffect !== null) {
+    const firstEffect = lastEffect.next!
+    let effect = firstEffect
+    do {
+      if ((effect.tag & HasEffect) !== NoFlags) {
+        effect.destroy = effect.create()
+      }
+      effect = effect.next!
+    } while (effect !== firstEffect)
+  }
+}
 
 // ---------------- Commit Passive ----------------
 export function commitPassiveUnmountEffects(finishedWork: FiberNode) {

@@ -8,7 +8,7 @@ export function reconcileChildFibers(fiber: FiberNode, children: ReactElementTyp
     return reconcileChildrenArray(fiber, children)
   }
 
-  if (children.$$typeof === REACT_ELEMENT_TYPE) {
+  if (children && children.$$typeof === REACT_ELEMENT_TYPE) {
     return placeSingleChild(reconcileSingleElement(fiber, children))
   }
 

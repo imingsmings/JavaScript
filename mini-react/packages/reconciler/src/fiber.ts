@@ -19,7 +19,8 @@ export function createFiber(tag: WorkTag, key: string | null, pendingProps: any)
     flags: NoFlags,
     deletions: null,
     index: 0,
-    subtreeFlags: NoFlags
+    subtreeFlags: NoFlags,
+    updateQueue: null
   }
 }
 

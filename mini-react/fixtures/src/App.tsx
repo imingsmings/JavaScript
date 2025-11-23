@@ -1,48 +1,63 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-function Child(props: any) {
-  return <div onClick={() => props.updater()}>{props.a + props.b}</div>
+async function getData(count: number) {
+  const data = await new Promise<number>((resolve) => {
+    setTimeout(() => {
+      resolve(count)
+    }, 1000)
+  })
+  return data
+}
+
+function Child() {
+  useEffect(() => {
+    console.log('Child useEffect')
+  }, [])
+  return <div>Child</div>
 }
 
 function App() {
   const [count, setCount] = useState(666)
-  const [count1, setCount1] = useState(888)
-  const [list, setList] = useState(['A', 'B'])
+  const [list, setList] = useState<number[]>([])
+  const [loading, setLoading] = useState(false)
 
   const handleClick = (e: any) => {
     setCount(count + 1)
-    setCount1(count1 + 2)
-    const newList: string[] = [...list, `${Date.now()}`].reverse()
-    setList(newList)
   }
 
-  console.log('App Render')
+  useEffect(() => {
+    setLoading(true)
+    getData(count)
+      .then((value) => {
+        setList([...list, value])
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [count])
+
+  // useEffect(() => {
+  //   console.log('useEffect 2')
+  // })
 
   return (
     <div>
-      <span
+      <Child />
+      <button
         onClick={handleClick}
         style={{ color: 'red', fontSize: '20px', backgroundColor: 'skyblue' }}
       >
         {count}
-        {count1}
-      </span>
-      <ul>
-        {list.map((item) => {
-          return <li key={item}>{item}</li>
-        })}
-      </ul>
-      <div>{count % 2 == 0 ? <span>React</span> : <span>Next.js</span>}</div>
-      <Child
-        a={count}
-        b={count1}
-        updater={handleClick}
-      />
-      <div>
-        {Array.from({ length: 50000 }).map((item, index) => {
-          return <div key={index}>{index}</div>
-        })}
-      </div>
+      </button>
+      {loading ? (
+        <div>Loaidng...</div>
+      ) : (
+        <ul>
+          {list.map((item) => {
+            return <li key={item}>{item}</li>
+          })}
+        </ul>
+      )}
     </div>
   )
 }
