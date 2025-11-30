@@ -10,6 +10,10 @@ export type Hook = {
   next: Hook | null
 }
 
+export type RefObject<T> = {
+  current: T
+}
+
 let currentlyRenderingFiber: FiberNode | null = null
 let workInProgressHook: Hook | null = null
 let currentHook: Hook | null = null
@@ -147,18 +151,33 @@ function areHookDepsEqual(prevDeps: any[] | null, nextDeps: any[] | null) {
   return true
 }
 
+function mountRef(initialState: any) {
+  const ref: RefObject<any> = {
+    current: initialState
+  }
+  const hook = mountWorkInProgressHook(ref)
+  return hook.memoizedState
+}
+
+function updateRef() {
+  const hook = updateWorkInProgressHook()
+  return hook?.memoizedState
+}
+
 export function renderWithHooks(workInProgress: FiberNode, Component: Function) {
   currentlyRenderingFiber = workInProgress
 
   if (currentlyRenderingFiber.memoizedState === null) {
     ReactSharedInternals.H = {
       useState: mountState,
-      useEffect: mountEffect
+      useEffect: mountEffect,
+      useRef: mountRef
     }
   } else {
     ReactSharedInternals.H = {
       useState: updateState,
-      useEffect: updateEffect
+      useEffect: updateEffect,
+      useRef: updateRef
     }
   }
 

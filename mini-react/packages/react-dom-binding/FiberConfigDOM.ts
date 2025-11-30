@@ -48,6 +48,7 @@ export function setProp(dom: Instance, prop: string, value: any) {
       }
       break
     case 'event':
+    case 'ref':
       break
     case 'style':
       updateStyle(dom, value)

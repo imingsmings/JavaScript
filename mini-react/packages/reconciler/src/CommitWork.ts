@@ -33,6 +33,8 @@ function recursivelyTraversePassiveMountEffects(finishedWork: FiberNode) {
     commitPassiveMountEffectsOnFiber(child)
     child = child.sibling
   }
+
+  attachRef(finishedWork)
 }
 
 function commitHookPassiveMountEffects(finishedWork: FiberNode) {
@@ -49,6 +51,18 @@ function commitHookPassiveMountEffects(finishedWork: FiberNode) {
       }
       effect = effect.next!
     } while (effect !== firstEffect)
+  }
+}
+
+function attachRef(finishedWork: FiberNode) {
+  const ref = finishedWork.ref
+  if (!ref) return
+
+  const instance = finishedWork.stateNode
+  if (typeof ref === 'function') {
+    ref(instance)
+  } else {
+    ref.current = instance
   }
 }
 
@@ -84,7 +98,11 @@ function recursivelyTraversePassiveUnmountEffects(finishedWork: FiberNode) {
     detachAlternateSibling(finishedWork)
   }
 
-  if ((finishedWork.subtreeFlags & ChildDeletion) !== NoFlags) {
+  if ((finishedWork.flags & PassiveEffect) !== NoFlags) {
+    commitHookEffectListDestroy(finishedWork)
+  }
+
+  if ((finishedWork.subtreeFlags & ChildDeletion) !== NoFlags || (finishedWork.subtreeFlags & PassiveEffect) !== NoFlags) {
     let child = finishedWork.child
     while (child !== null) {
       commitPassiveUnmountEffectsOnFiber(child)
@@ -150,11 +168,38 @@ function detachFiberAfterEffects(fiber: FiberNode) {
     const dom = fiber.stateNode
     dom && detachDeletedInstance(dom)
   }
+  detachRef(fiber)
   fiber.child = null
   fiber.sibling = null
   fiber.deletions = null
   fiber.stateNode = null
   fiber.return = null
+}
+
+function commitHookEffectListDestroy(finishedWork: FiberNode) {
+  const updateQueue = finishedWork.updateQueue
+  if (updateQueue === null) return
+
+  const lastEffect = updateQueue.lastEffect
+  if (lastEffect !== null) {
+    const firstEffect = lastEffect.next!
+    let effect = firstEffect
+    do {
+      typeof effect.destroy === 'function' && effect.destroy()
+      effect = effect.next!
+    } while (effect !== firstEffect)
+  }
+}
+
+function detachRef(fiber: FiberNode) {
+  const ref = fiber.ref
+  if (!ref) return
+
+  if (typeof ref === 'function') {
+    ref(null)
+  } else {
+    ref.current = null
+  }
 }
 
 // ---------------- Commit Mutation ----------------

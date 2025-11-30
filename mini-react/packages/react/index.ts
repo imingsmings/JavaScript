@@ -9,7 +9,11 @@ export function useState(initialState: any) {
 }
 
 export function useEffect(create: SimpleEffectCreate, createDeps?: any[]) {
-  return ReactSharedInternals.H.useEffect(create, createDeps)
+  ReactSharedInternals.H.useEffect(create, createDeps)
+}
+
+export function useRef(initialState: any) {
+  return ReactSharedInternals.H.useRef(initialState)
 }
 
 export const version = '1.0.0'

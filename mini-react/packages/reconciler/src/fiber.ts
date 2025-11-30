@@ -30,6 +30,7 @@ export function createFiberFromTypeAndProps(type: any, props: any, key: string |
   fiber.elementType = type
   fiber.type = type
   fiber.pendingProps = props
+  fiber.ref = props.ref
   return fiber
 }
 
